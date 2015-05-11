@@ -1,10 +1,14 @@
 
 #pragma once
 
+#include "title.h"
+
 
 class cScene{
 
-protected:
+private:
+
+	cTitle title;
 
 	//ƒV[ƒ“‚Ì–¼‘O(No.)
 	enum SceneName{
