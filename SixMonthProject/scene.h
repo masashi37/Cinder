@@ -26,6 +26,8 @@ public:
 
 	void setup();
 	void update();
+	void keyDown(KeyEvent);
+	void keyUp(KeyEvent);
 	void shift();
 	void draw();
 };

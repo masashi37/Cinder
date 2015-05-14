@@ -3,11 +3,14 @@
 
 #include "common.h"
 #include "cinder/Rand.h"
+#include "arrow.h"
 
 
 class cTitle{
 
 private:
+
+	cArrow arrow;
 
 	gl::Texture logo_pic;			//タイトルロゴ 128*32
 	gl::Texture stage_select_pic;	//ステージ選択ロゴ 128*64
@@ -32,6 +35,8 @@ public:
 
 	void setup();
 	void update();
+	void keyEvent(KeyEvent);
+	void keyUp(KeyEvent);
 	void shift();
 	void draw();
 

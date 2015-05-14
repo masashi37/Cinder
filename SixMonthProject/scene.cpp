@@ -18,6 +18,9 @@ void cScene::setup(){
 		break;
 	case RESULT:
 		break;
+
+	default:
+		break;
 	}
 
 }
@@ -34,6 +37,47 @@ void cScene::update(){
 		break;
 	case RESULT:
 		break;
+
+	default:
+		break;
+	}
+
+}
+
+void cScene::keyDown(KeyEvent event) {
+
+	switch (scene_mover){
+	case TITLE:
+		title.keyEvent(event);
+		break;
+	case SELECT:
+		break;
+	case GAME:
+		break;
+	case RESULT:
+		break;
+
+	default:
+		break;
+	}
+
+}
+
+void cScene::keyUp(KeyEvent event) {
+
+	switch (scene_mover){
+	case TITLE:
+		title.keyEvent(event);
+		break;
+	case SELECT:
+		break;
+	case GAME:
+		break;
+	case RESULT:
+		break;
+
+	default:
+		break;
 	}
 
 }
@@ -49,6 +93,9 @@ void cScene::shift(){
 	case GAME:
 		break;
 	case RESULT:
+		break;
+
+	default:
 		break;
 	}
 
