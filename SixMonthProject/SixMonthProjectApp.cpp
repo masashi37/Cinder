@@ -18,8 +18,9 @@ private:
 public:
 	void setup();
 	void update();
-	void keyDown(KeyEvent);
-	void keyUp(KeyEvent);
+	void mouseDown(MouseEvent);
+	void mouseUp(MouseEvent);
+	void mouseMove(MouseEvent);
 	void draw();
 };
 
@@ -42,13 +43,15 @@ void Main::update(){
 	scene.shift();
 }
 
-void Main::keyDown(KeyEvent event){
-	scene.keyDown(event);
+void Main::mouseDown(MouseEvent event){
+	scene.mouseDown(event);
 }
 
-void Main::keyUp(KeyEvent event){
-	scene.keyUp(event);
+void Main::mouseUp(MouseEvent event){
+	scene.mouseUp(event);
 }
+
+void Main::mouseMove(MouseEvent event){}
 
 void Main::draw(){
 	gl::clear(Color(0, 0, 0));

@@ -53,15 +53,21 @@ void cTitle::update(){
 
 }
 
-void cTitle::keyEvent(KeyEvent event){
+void cTitle::mouseDown(MouseEvent event){
 
-	arrow.keyDown(event);
+	arrow.mouseDown(event);
 	
 }
 
-void cTitle::keyUp(KeyEvent event){
+void cTitle::mouseUp(MouseEvent event){
 
-	arrow.keyUp(event);
+	arrow.mouseUp(event);
+
+}
+
+void cTitle::mouseMove(MouseEvent event){
+
+	arrow.mouseMove(event);
 
 }
 

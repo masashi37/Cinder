@@ -35,8 +35,9 @@ public:
 
 	void setup();
 	void update();
-	void keyEvent(KeyEvent);
-	void keyUp(KeyEvent);
+	void mouseDown(MouseEvent);
+	void mouseUp(MouseEvent);
+	void mouseMove(MouseEvent);
 	void shift();
 	void draw();
 

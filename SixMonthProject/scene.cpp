@@ -44,11 +44,11 @@ void cScene::update(){
 
 }
 
-void cScene::keyDown(KeyEvent event) {
+void cScene::mouseDown(MouseEvent event) {
 
 	switch (scene_mover){
 	case TITLE:
-		title.keyEvent(event);
+		title.mouseDown(event);
 		break;
 	case SELECT:
 		break;
@@ -63,11 +63,30 @@ void cScene::keyDown(KeyEvent event) {
 
 }
 
-void cScene::keyUp(KeyEvent event) {
+void cScene::mouseUp(MouseEvent event) {
 
 	switch (scene_mover){
 	case TITLE:
-		title.keyEvent(event);
+		title.mouseUp(event);
+		break;
+	case SELECT:
+		break;
+	case GAME:
+		break;
+	case RESULT:
+		break;
+
+	default:
+		break;
+	}
+
+}
+
+void cScene::mouseMove(MouseEvent event) {
+
+	switch (scene_mover){
+	case TITLE:
+		title.mouseMove(event);
 		break;
 	case SELECT:
 		break;
