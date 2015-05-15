@@ -3,10 +3,14 @@
 
 #include "common.h"
 #include "cinder/Matrix.h"
+#include "arrowMove.h"
+
 
 class cArrow{
 
 private:
+
+	cArrowMove move;
 
 	//–î
 	struct Arrow{

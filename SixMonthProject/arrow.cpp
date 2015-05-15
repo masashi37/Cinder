@@ -14,63 +14,30 @@ void cArrow::setup(){
 
 void cArrow::update(){
 
-	//矢の速度を変更する
-	if (is_press_space){
-
-		arrow.spped += speed_plus;
-
-		if (arrow.spped > 3 || arrow.spped < 0)
-			speed_plus *= -1;
-
-	}
-	else arrow.spped = 0;
-
-	//矢を放つ
-	if (is_shooting_arrow){
-
-		arrow.pos.x += arrow.spped;
-
-	}
-
-	console() << arrow.spped << std::endl;
+	//フラグ内操作
 
 }
 
 void cArrow::mouseDown(MouseEvent event){
-/*
-	if (arrow.radian.z > -70)
-		if (event.getCode() == KeyEvent::KEY_w)
-			arrow.radian.z -= 1;
-	if (arrow.radian.z < 10)
-		if (event.getCode() == KeyEvent::KEY_s)
-			arrow.radian.z += 1;
 
-	if (event.getCode() == KeyEvent::KEY_SPACE){
-		is_press_space = true;
-	}
-*/
+	//isLeftDown -> isPress ON
+
 }
 
 void cArrow::mouseUp(MouseEvent event){
-/*
-	if (event.getCode() == KeyEvent::KEY_SPACE){
-		is_press_space = false;
-		is_shooting_arrow = true;
-	}
-*/
+
+	//isLeftUp -> 
+	//		isPress OFF
+	//		isShooting ON
+
 }
 
 void cArrow::mouseMove(MouseEvent event){
 
-	mouse_pos = App::getMousePos();
-
-	Vec2f pos1 = mouse_pos;
-	Vec2f pos2 = { arrow.pos.x, arrow.pos.y };
-	float pos = (pos2.x - pos1.x) + (pos2.y - pos1.y);
-
-	console() << pos << std::endl;
-
-	arrow.radian.z = pos;
+	mouse_pos = event.getPos();
+	
+	arrow.radian.z =
+		move.direction(event, Vec2f(arrow.pos.x, arrow.pos.y));
 
 }
 

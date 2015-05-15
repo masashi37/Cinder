@@ -51,7 +51,9 @@ void Main::mouseUp(MouseEvent event){
 	scene.mouseUp(event);
 }
 
-void Main::mouseMove(MouseEvent event){}
+void Main::mouseMove(MouseEvent event){
+	scene.mouseMove(event);
+}
 
 void Main::draw(){
 	gl::clear(Color(0, 0, 0));
