@@ -1,53 +1,51 @@
 
 #include "arrow.h"
 
-void cArrow::setup(){
-
-	arrow.pos = { -WIDTH / 2 + 150, 100, 0 };
-	arrow.radian = { 0, 0, 0 };
-	arrow.spped = 0;
-
-	is_press_space = false;
-	is_shooting_arrow = false;
-
-}
+void cArrow::setup(){}
 
 void cArrow::update(){
 
-	//ƒtƒ‰ƒO“à‘€ì
+	move.shootPrepare();
+	move.shootArrow();
 
 }
 
 void cArrow::mouseDown(MouseEvent event){
 
-	//isLeftDown -> isPress ON
+	if (event.isLeftDown())
+		is_press_left_button = true;
 
 }
 
 void cArrow::mouseUp(MouseEvent event){
 
-	//isLeftUp -> 
-	//		isPress OFF
-	//		isShooting ON
+	if (!event.isLeftDown()){
+		is_press_left_button = false;
+		is_shooting_arrow = true;
+	}
 
 }
 
 void cArrow::mouseMove(MouseEvent event){
 
-	mouse_pos = event.getPos();
-	
-	arrow.radian.z =
-		move.direction(event, Vec2f(arrow.pos.x, arrow.pos.y));
+	mouse_pos = Vec3f(event.getPos().xy(), 0);
+
+	degree = toDegrees(move.direction(event));
+	arrow_status.radian = { 0, 0, degree };
 
 }
 
 void cArrow::draw(){
 
 	gl::pushModelView();
-	gl::translate(Vec2f(arrow.pos.x, arrow.pos.y));
-	gl::rotate(arrow.radian);
+	gl::translate(arrow_status.pos.xy());
 
-	gl::drawCube(Vec3f::zero(), arrow.size);
+	//if (mouse_pos.x <= arrow_status.pos.x)
+	//	arrow_status.radian.z = -arrow_status.radian.z;
+
+	gl::rotate(arrow_status.radian);
+
+	gl::drawCube(Vec3f::zero(), arrow_status.size);
 
 	gl::popModelView();
 

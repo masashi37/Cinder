@@ -3,6 +3,7 @@
 
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Matrix.h"
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
 

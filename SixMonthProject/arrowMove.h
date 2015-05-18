@@ -1,17 +1,14 @@
 
 #pragma once
-#include "common.h"
+#include "arrowStatus.h"
 
 
-class cArrowMove{
-	
-private:
+class cArrowMove :public cArrowStatus{
 
-	Vec2f mouse_pos;		//マウスポジション
-	
-	public:
+public:
 
-		float direction(MouseEvent, Vec2f&);
-		void shoot(MouseEvent);
+	float direction(MouseEvent);
+	void shootPrepare();
+	void shootArrow();
 
 };
