@@ -2,27 +2,24 @@
 #pragma once
 
 #include "cinder/app/AppNative.h"
-#include "cinder/gl/gl.h"
-#include "cinder/Matrix.h"
+#include "cinder/gl/gl.h"	
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
 
 using namespace ci;
 using namespace ci::app;
 
-
-//画面サイズ
 enum Window{
-	WIDTH = 1000,
+	WIDTH = 500,
+	HALF_WIDTH = 500 / 2,
 	HEIGHT = 500,
-
-	//画面の半分
-	SCREEN_HALF_X = WIDTH / 2,
-	SCREEN_HALF_Y = HEIGHT / 2,
+	HALF_HEIGHT = HEIGHT / 2
 };
 
-//使う画面サイズ
-static struct UsedWindow{
-	const Vec3f pos = { 0, 0, -100 };
-	const Vec3f size = { WIDTH, HEIGHT, 200 };
-}room;//表示空間
+//表示空間
+const float room_depth = 500;
+class cRoom{
+public:
+	Vec3f pos = { 0, 0, -room_depth / 2 };
+	Vec3f size = { WIDTH, HEIGHT, room_depth };
+};

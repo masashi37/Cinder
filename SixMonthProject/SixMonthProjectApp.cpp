@@ -3,9 +3,7 @@
 // タイトル ： Arrow
 //
 
-
 #include "common.h"
-
 #include "scene.h"
 
 
@@ -16,49 +14,43 @@ private:
 	cScene scene;
 
 public:
-	void setup();
-	void update();
-	void mouseDown(MouseEvent);
-	void mouseUp(MouseEvent);
-	void mouseMove(MouseEvent);
-	void draw();
-};
 
+	void setup(){
 
-void Main::setup(){
+		//ウィンドウサイズ
+		setWindowSize(WIDTH, HEIGHT);
 
-	setWindowSize(WIDTH, HEIGHT);
-	/*setWindowPos(Vec2i::zero());
-	Vec2i offset = {
-		static_cast<int>(getWindowCenter().x) - WIDTH / 2,
-		static_cast<int>(getWindowCenter().y) - HEIGHT / 2
+		scene.setup();
+
 	};
-	setWindowPos(getWindowCenter());*/
 
-	scene.setup();
-}
+	void update(){
+		scene.update();
+		scene.shift();
+	};
 
-void Main::update(){
-	scene.update();
-	scene.shift();
-}
+	void draw(){
+		//背景色
+		gl::clear(Color(0, 0, 0));
 
-void Main::mouseDown(MouseEvent event){
-	scene.mouseDown(event);
-}
+		//原点保存と変更
+		gl::pushModelView();
+		gl::translate(getWindowSize() / 2);
 
-void Main::mouseUp(MouseEvent event){
-	scene.mouseUp(event);
-}
+		scene.draw();
 
-void Main::mouseMove(MouseEvent event){
-	scene.mouseMove(event);
-}
+		//原点回帰
+		gl::popModelView();
+	};
 
-void Main::draw(){
-	gl::clear(Color(0, 0, 0));
+	void keyDown(KeyEvent event){
+	scene.keyDown(event);
+	};
 
-	scene.draw();
-}
+	void keyUp(KeyEvent event){
+	scene.keyUp(event);
+	};
+	
+};
 
 CINDER_APP_NATIVE(Main, RendererGl)

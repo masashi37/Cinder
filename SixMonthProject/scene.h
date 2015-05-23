@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "common.h"
 #include "title.h"
 
 
@@ -26,9 +27,13 @@ public:
 
 	void setup();
 	void update();
-	void mouseDown(MouseEvent);
-	void mouseUp(MouseEvent);
-	void mouseMove(MouseEvent);
 	void shift();
 	void draw();
+
+	void keyDown(KeyEvent);
+	void keyUp(KeyEvent);
+
+	//void mouseDown(MouseEvent);
+	//void mouseUp(MouseEvent);
+	//void mouseMove(MouseEvent);
 };
