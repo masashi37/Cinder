@@ -28,7 +28,12 @@ void cTitle::keyDown(KeyEvent event){
 
 }
 
-void cTitle::keyUp(KeyEvent event){}
+void cTitle::keyUp(KeyEvent event){
+
+	//‹|‚Ì‘€ì
+	arrow.keyUp(event);
+
+}
 
 /*
 void cTitle::mouseDown(KeyEvent event){}

@@ -6,9 +6,24 @@ void cArrow::setup(){}
 
 void cArrow::update(){
 
-	if (is_push_space){
+	if (is_press_space)
 		this->speed += this->plus_speed;
 
+	switch (key_direction){
+	case NONE:
+		break;
+	case LEFT:
+		this->pos.x -= this->move;
+		break;
+	case RIGHT:
+		this->pos.x += this->move;
+		break;
+	case UP:
+		this->pos.y -= this->move;
+		break;
+	case DOWN:
+		this->pos.y += this->move;
+		break;
 	}
 
 }
@@ -25,26 +40,36 @@ void cArrow::keyDown(KeyEvent event){
 
 	//弓の移動
 	if (event.getCode() == KeyEvent::KEY_KP4)
-		this->pos.x -= this->move;
+		key_direction = Key::LEFT;
 	if (event.getCode() == KeyEvent::KEY_KP6)
-		this->pos.x += this->move;
+		key_direction = Key::RIGHT;
 	if (event.getCode() == KeyEvent::KEY_KP8)
-		this->pos.y -= this->move;
+		key_direction = Key::UP;
 	if (event.getCode() == KeyEvent::KEY_KP2)
-		this->pos.y += this->move;
+		key_direction = Key::DOWN;
 
 	//パワーチャージ
 	if (event.getCode() == KeyEvent::KEY_SPACE){
-		is_push_space = true;
+		is_press_space = true;
 	}
 
 }
 
 void cArrow::keyUp(KeyEvent event){
 
+	//弓の移動
+	if (event.getCode() != KeyEvent::KEY_KP4)
+		key_direction = Key::NONE;
+	if (event.getCode() != KeyEvent::KEY_KP6)
+		key_direction = Key::NONE;
+	if (event.getCode() != KeyEvent::KEY_KP8)
+		key_direction = Key::NONE;
+	if (event.getCode() != KeyEvent::KEY_KP2)
+		key_direction = Key::NONE;
+
 	//パワーチャージ
-	if (event.getCode() == KeyEvent::KEY_SPACE){
-		is_push_space = false;
+	if (event.getCode() != KeyEvent::KEY_SPACE){
+		is_press_space = false;
 		is_shoot_arrow = true;
 	}
 

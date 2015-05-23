@@ -12,8 +12,16 @@ class cArrow{
 
 	float speed = 0;
 	const float plus_speed = 1.0f;
-	bool is_push_space = false;
+	bool is_press_space = false;
 	bool is_shoot_arrow = false;
+
+	//ÉLÅ[ëÄçÏ
+	enum Key{
+		NONE,
+		LEFT,RIGHT,
+		UP,DOWN
+	};
+	int key_direction = 0;
 
 public:
 
