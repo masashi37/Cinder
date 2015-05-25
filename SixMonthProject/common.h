@@ -3,8 +3,11 @@
 
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"	
+
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
+
+#include "cinder/Rand.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -17,9 +20,15 @@ enum Window{
 };
 
 //•\Ž¦‹óŠÔ
-const float room_depth = 500;
+const float room_depth = 1000;
 class cRoom{
 public:
 	Vec3f pos = { 0, 0, -room_depth / 2 };
 	Vec3f size = { WIDTH, HEIGHT, room_depth };
+};
+
+//‰æ‘œ
+struct TextureData{
+	gl::Texture pic;
+	Vec2f pos;
 };
