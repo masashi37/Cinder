@@ -8,22 +8,24 @@ void cArrow::update(){
 
 	//弓を放つ力チャージ
 	if (is_press_space){
-		speed += plus_speed;
-		if (speed > SPEED_MAX || speed < 0)
+		//チャージ中、弓の速度を変更
+		arrow_speed += plus_speed;
+		if (arrow_speed > SPEED_MAX || arrow_speed < 0)
 			plus_speed *= -1;
 	}
 	//弓の発射
 	if (is_shoot_arrow){
+		//チャージ後、弓に重力をかけて発射
 		gravity += gravity_puls;
 		pos.y += gravity;
-		pos.z -= speed;
+		pos.z -= arrow_speed;
 	}
-	//壁の当たり判定(z軸)
-	if (pos.z < -room_depth ||
-		pos.y > HEIGHT / 2){
+	//壁の当たり判定(奥と底)
+	if (pos.z < -room_depth || pos.y > HEIGHT / 2){
+		//当たったら、弓関係の数値を初期化
 		pos = Vec3f::zero();
 		gravity = 0.0f;
-		speed = 0.0f;
+		arrow_speed = 0.0f;
 		is_shoot_arrow = false;
 	}
 
@@ -53,11 +55,19 @@ void cArrow::shift(){}
 
 void cArrow::draw(){
 
-	gl::drawCube(this->pos, this->size);
+	//弓矢本体
+	gl::drawCube(pos, size);
 
+	//チャージ中
 	if (is_press_space){
-		gl::drawCube(pos + Vec3f(-GAGE_SPACE, 0, 0), Vec3f(10, speed * 2, 10));
-		gl::drawStrokedCube(pos + Vec3f(-GAGE_SPACE, 0, 0), Vec3f(10, SPEED_MAX * 2, 10));
+		//チャージゲージ
+		gl::drawCube(
+			pos + Vec3f((pos.x >= 0) ? -(float)GAGE_SPACE : (float)GAGE_SPACE, 0, 0),
+			Vec3f(10, arrow_speed * 2, 10));
+		//チャージゲージの枠
+		gl::drawStrokedCube(
+			pos + Vec3f((pos.x >= 0) ? -(float)GAGE_SPACE : (float)GAGE_SPACE, 0, 0),
+			Vec3f(10, SPEED_MAX * 2, 10));
 	}
 }
 
@@ -82,7 +92,7 @@ void cArrow::keyDown(KeyEvent event){
 
 void cArrow::keyUp(KeyEvent event){
 
-	//弓の移動
+	//弓の移動終了
 	if (event.getCode() == KeyEvent::KEY_LEFT)
 		key_direction = Key::NONE;
 	if (event.getCode() == KeyEvent::KEY_RIGHT)
@@ -92,7 +102,7 @@ void cArrow::keyUp(KeyEvent event){
 	if (event.getCode() == KeyEvent::KEY_DOWN)
 		key_direction = Key::NONE;
 
-	//パワーチャージ
+	//パワーチャージ終了
 	if (event.getCode() == KeyEvent::KEY_SPACE){
 		is_press_space = false;
 		is_shoot_arrow = true;

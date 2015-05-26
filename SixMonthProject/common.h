@@ -8,10 +8,12 @@
 #include "cinder/gl/Texture.h"
 
 #include "cinder/Rand.h"
+#include <ctime>
 
 using namespace ci;
 using namespace ci::app;
 
+//ウィンドウサイズ
 enum Window{
 	WIDTH = 500,
 	HALF_WIDTH = 500 / 2,
@@ -31,4 +33,10 @@ public:
 struct TextureData{
 	gl::Texture pic;
 	Vec2f pos;
+};
+
+//オブジェクト
+struct Object{
+	Vec3f pos;
+	Vec3f size;
 };

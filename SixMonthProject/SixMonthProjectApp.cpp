@@ -32,7 +32,8 @@ public:
 	void draw(){
 		//”wŒiF
 		gl::clear(Color(0, 0, 0));
-		gl::disableAlphaBlending();
+		//‰æ‘œ‚Ì“§–¾‰»
+		gl::enableAlphaBlending();
 
 		//Œ´“_•Û‘¶‚Æ•ÏX
 		gl::pushModelView();
