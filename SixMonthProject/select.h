@@ -2,26 +2,13 @@
 #pragma once
 
 #include "common.h"
-#include "title.h"
-#include "select.h"
+#include "arrow.h"
 
 
-class cScene{
+class cSelect{
 
-private:
-
-	cTitle title;
-	cSelect select;
-
-	//シーンの名前(No.)
-	enum SceneName{
-		TITLE,
-		SELECT,
-		GAME,
-		RESULT,
-	};
-
-	int scene_mover;	//シーンを切り替えるスイッチ
+	cRoom room;
+	cArrow arrow;
 
 public:
 

@@ -36,8 +36,8 @@ void cTitle::update(){
 		//ステージ選択ロゴの動作開始
 		stage_select_pic.pos.x += stage_logo_speed;
 
-		if (stage_select_pic.pos.x < -WIDTH / 4 ||
-			stage_select_pic.pos.x + stage_select_pic.pic.getSize().x > WIDTH / 4)
+		if (stage_select_pic.pos.x < -WIDTH / 2 ||
+			stage_select_pic.pos.x + stage_select_pic.pic.getSize().x > WIDTH / 2)
 			stage_logo_speed *= -1;
 
 	}
@@ -55,8 +55,18 @@ void cTitle::draw(){
 
 	//ロゴ
 	gl::draw(logo_pic.pic, logo_pic.pos);
-	if (is_ready_title_logo)
+
+	if (is_ready_title_logo){
+		
+		gl::drawCube(
+			Vec3f(stage_select_pic.pos, -room_depth * 2),
+			Vec3f(300, 150, 100)
+			);
+		gl::pushModelView();
+		gl::translate(0, 0, -room_depth * 2);
 		gl::draw(stage_select_pic.pic, stage_select_pic.pos);
+		gl::popModelView();
+	}
 
 	//弓矢
 	arrow.draw();

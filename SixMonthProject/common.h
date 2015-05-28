@@ -40,3 +40,12 @@ struct Object{
 	Vec3f pos;
 	Vec3f size;
 };
+
+
+
+//‰æ‘œ‚Ì“\‚è•t‚¯
+/*gl::enable(GL_TEXTURE_2D);
+stage_select_pic.pic.bind();
+//‰æ‘œ‚Ì“\‚è•t‚¯‰ğœ
+stage_select_pic.pic.unbind();
+gl::disable(GL_TEXTURE_2D);*/

@@ -2,17 +2,16 @@
 #include "scene.h"
 
 
-cScene::cScene(){
-	scene_mover = TITLE;
-}
-
 void cScene::setup(){
+
+	scene_mover = TITLE;
 
 	switch (scene_mover){
 	case TITLE:
 		title.setup();
 		break;
 	case SELECT:
+		select.setup();
 		break;
 	case GAME:
 		break;
@@ -32,6 +31,7 @@ void cScene::update(){
 		title.update();
 		break;
 	case SELECT:
+		select.update();
 		break;
 	case GAME:
 		break;
@@ -51,6 +51,7 @@ void cScene::shift(){
 		title.shift();
 		break;
 	case SELECT:
+		select.shift();
 		break;
 	case GAME:
 		break;
@@ -70,6 +71,7 @@ void cScene::draw(){
 		title.draw();
 		break;
 	case SELECT:
+		select.draw();
 		break;
 	case GAME:
 		break;
@@ -86,6 +88,7 @@ void cScene::keyDown(KeyEvent event){
 		title.keyDown(event);
 		break;
 	case SELECT:
+		select.keyDown(event);
 		break;
 	case GAME:
 		break;
@@ -102,6 +105,7 @@ void cScene::keyUp(KeyEvent event){
 		title.keyUp(event);
 		break;
 	case SELECT:
+		select.keyUp(event);
 		break;
 	case GAME:
 		break;
