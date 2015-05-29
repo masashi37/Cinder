@@ -17,7 +17,9 @@ private:
 
 public:
 
-	void setup();
+	cScene::cScene();
+
+	void init();
 	void update();
 	void shift();
 	void draw();

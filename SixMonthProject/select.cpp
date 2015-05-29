@@ -2,7 +2,13 @@
 #include "select.h"
 
 
-void cSelect::setup(){}
+cSelect::cSelect(){}
+
+void cSelect::init(){
+
+	arrow.init();
+
+}
 
 void cSelect::update(){
 

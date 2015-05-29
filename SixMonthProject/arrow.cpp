@@ -2,7 +2,11 @@
 #include "arrow.h"
 
 
-void cArrow::setup(){}
+cArrow::cArrow(){}
+
+void cArrow::init(){
+	arrow_picture = loadImage(loadAsset("arrow/arrow.png"));
+}
 
 void cArrow::update(){
 
@@ -59,8 +63,15 @@ void cArrow::shift(){}
 
 void cArrow::draw(){
 
+	gl::enable(GL_TEXTURE_2D);
+	arrow_picture.bind();
+
 	//弓矢本体
 	gl::drawCube(pos, size);
+	gl::drawCube(pos, size1);
+
+	arrow_picture.unbind();
+	gl::disable(GL_TEXTURE_2D);
 
 	//チャージ中
 	if (is_push_space){

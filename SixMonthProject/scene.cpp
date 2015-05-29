@@ -2,25 +2,16 @@
 #include "scene.h"
 
 
-void cScene::setup(){
+cScene::cScene(){
 
 	scene_mover = TITLE;
 
-	switch (scene_mover){
-	case TITLE:
-		title.setup();
-		break;
-	case SELECT:
-		select.setup();
-		break;
-	case GAME:
-		break;
-	case RESULT:
-		break;
+}
 
-	default:
-		break;
-	}
+void cScene::init(){
+
+	title.init();
+	select.init();
 
 }
 

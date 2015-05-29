@@ -17,10 +17,10 @@ public:
 
 	void setup(){
 
+		scene.init();
+
 		//ウィンドウサイズ
 		setWindowSize(WIDTH, HEIGHT);
-
-		scene.setup();
 
 	};
 

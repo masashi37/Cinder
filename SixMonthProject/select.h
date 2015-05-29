@@ -12,7 +12,9 @@ class cSelect{
 
 public:
 
-	void setup();
+	cSelect::cSelect();
+
+	void init();
 	void update();
 	void shift();
 	void draw();

@@ -6,6 +6,8 @@
 
 class cArrow{
 
+	gl::Texture arrow_picture;
+
 	//定数--------------------------------------
 
 	//弓関連
@@ -14,15 +16,9 @@ class cArrow{
 		GAGE_SPACE = 20
 	};
 
-	//キー操作
-	enum Key{
-		NONE,
-		LEFT, RIGHT,
-		UP, DOWN
-	};
-
-	const Vec3f size = { 10.0f, 10.0f, 100.0f };	//弓のサイズ
-	const float move_speed = 3.0f;					//弓の動くスピード
+	const Vec3f size = { 1.0f, 20.0f, 100.0f };	//弓のサイズ
+	const Vec3f size1 = { 20.0f, 1.0f, 100.0f };
+	const float move_speed = 3.0f;				//弓の動くスピード
 
 	//変数---------------------------------------
 
@@ -47,7 +43,9 @@ class cArrow{
 
 public:
 
-	void setup();
+	cArrow::cArrow();
+
+	void init();
 	void update();
 	void shift();
 	void draw();
