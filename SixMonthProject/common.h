@@ -21,6 +21,14 @@ enum Window{
 	HALF_HEIGHT = HEIGHT / 2
 };
 
+//シーンの名前(No.)
+enum SceneName{
+	TITLE,
+	SELECT,
+	GAME,
+	RESULT,
+};
+
 //表示空間
 const float room_depth = 1000;
 class cRoom{

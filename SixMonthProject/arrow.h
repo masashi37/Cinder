@@ -52,6 +52,10 @@ public:
 	void shift();
 	void draw();
 
+	Vec3f getPos();
+	Vec3f getSize();
+	bool get_is_shooting();
+
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);
 

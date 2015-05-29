@@ -48,7 +48,7 @@ void cScene::shift(){
 
 	switch (scene_mover){
 	case TITLE:
-		title.shift();
+		scene_mover = title.shift(scene_mover);
 		break;
 	case SELECT:
 		select.shift();

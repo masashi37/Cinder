@@ -37,7 +37,7 @@ public:
 
 		//Œ´“_•Û‘¶‚Æ•ÏX
 		gl::pushModelView();
-		gl::translate(getWindowSize() / 2);
+		gl::translate(getWindowCenter());
 
 		scene.draw();
 

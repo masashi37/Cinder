@@ -13,14 +13,6 @@ private:
 	cTitle title;
 	cSelect select;
 
-	//シーンの名前(No.)
-	enum SceneName{
-		TITLE,
-		SELECT,
-		GAME,
-		RESULT,
-	};
-
 	int scene_mover;	//シーンを切り替えるスイッチ
 
 public:

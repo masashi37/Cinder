@@ -16,11 +16,14 @@ class cTitle{
 
 	//変数---------------------------------------
 
-	TextureData logo_pic;			//タイトルロゴ 128*32
-	TextureData stage_select_pic;	//ステージ選択ロゴ 128*64
+	TextureData logo_pic;			//タイトルロゴ
+	TextureData stage_select_pic;	//ステージ選択ロゴ
 
 	float logo_fadein_speed;		//タイトルロゴのフェードイン速度
 	float stage_logo_speed;			//ステージ選択ロゴの速度
+
+	float stage_logo_pos_z = -room_depth;
+	float stage_logo_size_z = 10;
 
 	bool is_ready_title_logo;		//タイトルロゴのフェードインが完了したか？
 
@@ -28,7 +31,7 @@ public:
 
 	void setup();
 	void update();
-	void shift();
+	int shift(int);
 	void draw();
 
 	void keyDown(KeyEvent);

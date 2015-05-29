@@ -75,6 +75,18 @@ void cArrow::draw(){
 	}
 }
 
+Vec3f cArrow::getPos(){
+	return pos;
+}
+
+Vec3f cArrow::getSize(){
+	return size;
+}
+
+bool cArrow::get_is_shooting(){
+	return is_shoot_arrow;
+}
+
 void cArrow::keyDown(KeyEvent event){
 
 	//‹|‚ÌˆÚ“®
