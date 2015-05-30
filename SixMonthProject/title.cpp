@@ -70,10 +70,6 @@ void cTitle::update(){
 
 int cTitle::shift(int mover){
 
-	//
-	//画面半分で区切ってセレクトとオプションにする
-	//
-
 	if (arrow.get_is_shooting()){
 		if (hit.arrow_is_hit_cube(
 			arrow.getPos(), arrow.getSize(),
@@ -89,9 +85,6 @@ int cTitle::shift(int mover){
 }
 
 void cTitle::draw(){
-
-	console() << stage_select_pic.pic.getSize() << std::endl;
-	console() << getWindowSize() << std::endl;
 
 	//空間表示
 	gl::drawStrokedCube(room.pos, room.size);

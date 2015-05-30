@@ -4,7 +4,7 @@
 
 cScene::cScene(){
 
-	scene_mover = TITLE;
+	scene_mover = SELECT;
 
 }
 
@@ -12,23 +12,21 @@ void cScene::init(){
 
 	title.init();
 	select.init();
+	game.init();
 
 }
 
 void cScene::update(){
 
 	switch (scene_mover){
-	case TITLE:
-		title.update();
+	case TITLE:		title.update();
 		break;
-	case SELECT:
-		select.update();
+	case SELECT:	select.update();
 		break;
-	case GAME:
+	case GAME:		game.update();
 		break;
 	case RESULT:
 		break;
-
 	default:
 		break;
 	}
@@ -38,17 +36,14 @@ void cScene::update(){
 void cScene::shift(){
 
 	switch (scene_mover){
-	case TITLE:
-		scene_mover = title.shift(scene_mover);
+	case TITLE:		scene_mover = title.shift(scene_mover);
 		break;
-	case SELECT:
-		select.shift();
+	case SELECT:	scene_mover = select.shift(scene_mover);
 		break;
-	case GAME:
+	case GAME:		game.shift();
 		break;
 	case RESULT:
 		break;
-
 	default:
 		break;
 	}
@@ -58,13 +53,11 @@ void cScene::shift(){
 void cScene::draw(){
 
 	switch (scene_mover){
-	case TITLE:
-		title.draw();
+	case TITLE:		title.draw();
 		break;
-	case SELECT:
-		select.draw();
+	case SELECT:	select.draw();
 		break;
-	case GAME:
+	case GAME:		game.draw();
 		break;
 	case RESULT:
 		break;
@@ -75,13 +68,11 @@ void cScene::draw(){
 void cScene::keyDown(KeyEvent event){
 
 	switch (scene_mover){
-	case TITLE:
-		title.keyDown(event);
+	case TITLE:		title.keyDown(event);
 		break;
-	case SELECT:
-		select.keyDown(event);
+	case SELECT:	select.keyDown(event);
 		break;
-	case GAME:
+	case GAME:		game.keyDown(event);
 		break;
 	case RESULT:
 		break;
@@ -92,13 +83,11 @@ void cScene::keyDown(KeyEvent event){
 void cScene::keyUp(KeyEvent event){
 
 	switch (scene_mover){
-	case TITLE:
-		title.keyUp(event);
+	case TITLE:		title.keyUp(event);
 		break;
-	case SELECT:
-		select.keyUp(event);
+	case SELECT:	select.keyUp(event);
 		break;
-	case GAME:
+	case GAME:		game.keyUp(event);
 		break;
 	case RESULT:
 		break;

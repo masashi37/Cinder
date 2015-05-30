@@ -20,8 +20,7 @@ class cTitle{
 	TextureData logo_pic;			//タイトルロゴ
 	TextureData stage_select_pic;	//ステージ選択ロゴ
 
-	TextureData arrow_pic;		
-	//矢
+	TextureData arrow_pic;			//矢
 
 	float logo_fadein_speed;		//タイトルロゴのフェードイン速度
 	float arrow_fadein_speed;		//矢のフェードイン速度

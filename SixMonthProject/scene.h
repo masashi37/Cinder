@@ -4,6 +4,7 @@
 #include "common.h"
 #include "title.h"
 #include "select.h"
+#include "game.h"
 
 
 class cScene{
@@ -12,6 +13,7 @@ private:
 
 	cTitle title;
 	cSelect select;
+	cGame game;
 
 	int scene_mover;	//シーンを切り替えるスイッチ
 

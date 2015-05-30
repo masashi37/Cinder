@@ -4,34 +4,32 @@
 #include "common.h"
 #include "arrow.h"
 
+#include "select.h"
 
-class cSelect{
 
-	//クラスを使えるように------------------------------
+class cGame{
+
+private:
+
+	//クラスを使えるように-------------------------
 
 	cRoom room;
-	cCollision hit;
 	cArrow arrow;
+
+	cSelect select;
 
 	//変数---------------------------------------
 
-	enum {
-		TARGET_MAX = 5,
-		TARGET_SIZE = 80
-	};
-	Object select_target[TARGET_MAX];
-	int select_target_number;
+	int selection_number;
 
 public:
 
-	cSelect::cSelect();
+	cGame::cGame();
 
 	void init();
 	void update();
-	int shift(int);
+	void shift();
 	void draw();
-
-	int get_select_number(int);
 
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);
@@ -39,4 +37,5 @@ public:
 	//void mouseDown(MouseEvent);
 	//void mouseUp(MouseEvent);
 	//void mouseMove(MouseEvent);
+
 };
