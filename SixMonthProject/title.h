@@ -26,8 +26,8 @@ class cTitle{
 	float arrow_fadein_speed;		//矢のフェードイン速度
 	float stage_logo_speed;			//ステージ選択ロゴの速度
 
-	float stage_logo_pos_z = -room_depth;
-	float stage_logo_size_z = 10;
+	float stage_logo_pos_z;			//選択ロゴのz座標
+	float stage_logo_size_z;		//選択ロゴのzサイズ
 
 	bool is_in_arrow_pic;			//矢を飛ばすアニメーション
 	bool is_ready_title_logo;		//タイトルロゴのフェードインが完了したか？
@@ -43,9 +43,5 @@ public:
 
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);
-
-	//void mouseDown(MouseEvent);
-	//void mouseUp(MouseEvent);
-	//void mouseMove(MouseEvent);
 
 };

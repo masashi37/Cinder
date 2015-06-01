@@ -22,23 +22,25 @@ class cArrow{
 
 	//変数---------------------------------------
 
-	Vec3f pos = { -(size.x) / 2.0f, -(size.y) / 2.0f, 0.0f };	//弓の座標
+	Vec3f pos;						//弓の座標
+	Vec3f aim_light_begin;			//ライトの開始
+	Vec3f aim_light_end;			//ライトの終了
 
-	float arrow_speed = 0;			//弓の速度
-	float plus_speed = 0.5f;		//弓の速度の変化値
-	float gravity = 0.0f;			//重力
-	float gravity_puls = 0.1f;		//重力の変化値
+	float arrow_speed;				//弓の速度
+	float plus_speed;				//弓の速度の変化値
+	float gravity;					//重力
+	float gravity_puls;				//重力の変化値
 
-	int key_direction = 0;			//弓の動く向き
+	int key_direction;				//弓の動く向き
 
 	//キーの判定
-	bool is_push_space = false;		//スペースキー
-	bool is_push_left = false;		//左
-	bool is_push_right = false;		//右
-	bool is_push_up = false;		//上
-	bool is_push_down = false;		//下
+	bool is_push_space;				//スペースキー
+	bool is_push_left;				//左
+	bool is_push_right;				//右
+	bool is_push_up;				//上
+	bool is_push_down;				//下
 
-	bool is_shoot_arrow = false;	//弓が放たれたか？
+	bool is_shoot_arrow;			//弓が放たれたか？
 
 
 public:
@@ -57,8 +59,5 @@ public:
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);
 
-	//void mouseDown(MouseEvent);
-	//void mouseUp(MouseEvent);
-	//void mouseMove(MouseEvent);
 
 };

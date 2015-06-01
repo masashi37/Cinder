@@ -8,6 +8,9 @@ cTitle::cTitle(){
 	arrow_fadein_speed = 7.5f;
 	stage_logo_speed = 3.0f;
 
+	stage_logo_pos_z = -room_depth;
+	stage_logo_size_z = 10;
+
 	is_ready_title_logo = false;
 	is_in_arrow_pic = false;
 
@@ -136,11 +139,3 @@ void cTitle::keyUp(KeyEvent event){
 	arrow.keyUp(event);
 
 }
-
-/*
-void cTitle::mouseDown(KeyEvent event){}
-
-void cTitle::mouseUp(KeyEvent event){}
-
-void cTitle::mouseMove(KeyEvent event){}
-*/

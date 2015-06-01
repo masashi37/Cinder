@@ -29,7 +29,9 @@ enum Window{
 enum SceneName{
 	TITLE,
 	SELECT,
-	GAME,
+	
+	ENEMY_BREAKER,
+
 	RESULT,
 };
 
@@ -61,6 +63,22 @@ public:
 			arrow_pos.y + arrow_size.y / 2 > cube_pos.y - cube_size.y / 2 &&
 			arrow_pos.z - arrow_size.z / 2 < cube_pos.z + cube_size.z / 2 &&
 			arrow_pos.z + arrow_size.z / 2 > cube_pos.z - cube_size.z / 2){
+			is_hit = true;
+		}
+
+		return is_hit;
+	}
+
+	bool aim_is_hit_cube(
+		Vec2f arrow_pos, Vec2f arrow_size,
+		Vec2f cube_pos, Vec2f cube_size){
+
+		bool is_hit = false;
+
+		if (arrow_pos.x - arrow_size.x / 2 < cube_pos.x + cube_size.x / 2 &&
+			arrow_pos.x + arrow_size.x / 2 > cube_pos.x - cube_size.x / 2 &&
+			arrow_pos.y - arrow_size.y / 2 < cube_pos.y + cube_size.y / 2 &&
+			arrow_pos.y + arrow_size.y / 2 > cube_pos.y - cube_size.y / 2){
 			is_hit = true;
 		}
 

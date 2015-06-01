@@ -4,7 +4,7 @@
 
 cScene::cScene(){
 
-	scene_mover = SELECT;
+	scene_mover = ENEMY_BREAKER;
 
 }
 
@@ -12,18 +12,18 @@ void cScene::init(){
 
 	title.init();
 	select.init();
-	game.init();
+	enemy_breaker.init();
 
 }
 
 void cScene::update(){
 
 	switch (scene_mover){
-	case TITLE:		title.update();
+	case TITLE:				title.update();
 		break;
-	case SELECT:	select.update();
+	case SELECT:			select.update();
 		break;
-	case GAME:		game.update();
+	case ENEMY_BREAKER:		enemy_breaker.update();
 		break;
 	case RESULT:
 		break;
@@ -36,11 +36,11 @@ void cScene::update(){
 void cScene::shift(){
 
 	switch (scene_mover){
-	case TITLE:		scene_mover = title.shift(scene_mover);
+	case TITLE:				scene_mover = title.shift(scene_mover);
 		break;
-	case SELECT:	scene_mover = select.shift(scene_mover);
+	case SELECT:			scene_mover = select.shift(scene_mover);
 		break;
-	case GAME:		game.shift();
+	case ENEMY_BREAKER:		scene_mover = enemy_breaker.shift(scene_mover);
 		break;
 	case RESULT:
 		break;
@@ -53,11 +53,11 @@ void cScene::shift(){
 void cScene::draw(){
 
 	switch (scene_mover){
-	case TITLE:		title.draw();
+	case TITLE:				title.draw();
 		break;
-	case SELECT:	select.draw();
+	case SELECT:			select.draw();
 		break;
-	case GAME:		game.draw();
+	case ENEMY_BREAKER:		enemy_breaker.draw();
 		break;
 	case RESULT:
 		break;
@@ -68,11 +68,11 @@ void cScene::draw(){
 void cScene::keyDown(KeyEvent event){
 
 	switch (scene_mover){
-	case TITLE:		title.keyDown(event);
+	case TITLE:				title.keyDown(event);
 		break;
-	case SELECT:	select.keyDown(event);
+	case SELECT:			select.keyDown(event);
 		break;
-	case GAME:		game.keyDown(event);
+	case ENEMY_BREAKER:		enemy_breaker.keyDown(event);
 		break;
 	case RESULT:
 		break;
@@ -83,23 +83,15 @@ void cScene::keyDown(KeyEvent event){
 void cScene::keyUp(KeyEvent event){
 
 	switch (scene_mover){
-	case TITLE:		title.keyUp(event);
+	case TITLE:				title.keyUp(event);
 		break;
-	case SELECT:	select.keyUp(event);
+	case SELECT:			select.keyUp(event);
 		break;
-	case GAME:		game.keyUp(event);
+	case ENEMY_BREAKER:		enemy_breaker.keyUp(event);
 		break;
 	case RESULT:
 		break;
 	}
 
 }
-
-/*
-void cScene::mouseDown(KeyEvent event){}
-
-void cScene::mouseUp(KeyEvent event){}
-
-void cScene::mouseMove(KeyEvent event){}
-*/
 

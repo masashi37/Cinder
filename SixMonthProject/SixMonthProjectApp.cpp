@@ -17,10 +17,14 @@ public:
 
 	void setup(){
 
+		//シーン毎の初期化
 		scene.init();
 
 		//ウィンドウサイズ
 		setWindowSize(WIDTH, HEIGHT);
+
+		//ランダムのパターン化を解除
+		Rand::randomize();
 
 	};
 

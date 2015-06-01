@@ -16,11 +16,10 @@ class cSelect{
 	//ïœêî---------------------------------------
 
 	enum {
-		TARGET_MAX = 5,
-		TARGET_SIZE = 80
+		TARGET_MAX = 3,
+		TARGET_SIZE = 150
 	};
 	Object select_target[TARGET_MAX];
-	int select_target_number;
 
 public:
 
@@ -31,12 +30,7 @@ public:
 	int shift(int);
 	void draw();
 
-	int get_select_number(int);
-
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);
 
-	//void mouseDown(MouseEvent);
-	//void mouseUp(MouseEvent);
-	//void mouseMove(MouseEvent);
 };

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "title.h"
 #include "select.h"
-#include "game.h"
+#include "enemy_breaker.h"
 
 
 class cScene{
@@ -13,7 +13,7 @@ private:
 
 	cTitle title;
 	cSelect select;
-	cGame game;
+	cEnemyBreaker enemy_breaker;
 
 	int scene_mover;	//シーンを切り替えるスイッチ
 
@@ -28,8 +28,4 @@ public:
 
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);
-
-	//void mouseDown(MouseEvent);
-	//void mouseUp(MouseEvent);
-	//void mouseMove(MouseEvent);
 };

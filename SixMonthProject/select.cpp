@@ -15,7 +15,6 @@ cSelect::cSelect(){
 		};
 	}
 
-	select_target_number = 0;
 }
 
 void cSelect::init(){
@@ -37,8 +36,14 @@ int cSelect::shift(int mover){
 			if (hit.arrow_is_hit_cube(arrow.getPos(), arrow.getSize(),
 				select_target[i].pos, select_target[i].size)){
 
-				select_target_number = i;
-				mover = GAME;
+				switch (i){
+				case 0:		mover = ENEMY_BREAKER;
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				}
 
 			}
 		}
@@ -64,11 +69,6 @@ void cSelect::draw(){
 
 }
 
-int cSelect::get_select_number(int number){
-	number = select_target_number;
-	return number;
-}
-
 void cSelect::keyDown(KeyEvent event){
 
 	//ã|ÇÃëÄçÏ
@@ -82,11 +82,3 @@ void cSelect::keyUp(KeyEvent event){
 	arrow.keyUp(event);
 
 }
-
-/*
-void cSelect::mouseDown(KeyEvent event){}
-
-void cSelect::mouseUp(KeyEvent event){}
-
-void cSelect::mouseMove(KeyEvent event){}
-*/
