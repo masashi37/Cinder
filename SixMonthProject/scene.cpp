@@ -4,7 +4,7 @@
 
 cScene::cScene(){
 
-	scene_mover = ENEMY_BREAKER;
+	scene_mover = TITLE;
 
 }
 

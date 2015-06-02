@@ -12,13 +12,13 @@ class cArrow{
 
 	//弓関連
 	enum {
-		SPEED_MAX = 40,
-		GAGE_SPACE = 20
+		SPEED_MAX = 40,		//弓の速度限界値
+		GAGE_SPACE = 20		//弓のチャージゲージと弓の間隔
 	};
 
-	const Vec3f size = { 1.0f, 20.0f, 100.0f };	//弓のサイズ
-	const Vec3f size1 = { 20.0f, 1.0f, 100.0f };
-	const float move_speed = 3.0f;				//弓の動くスピード
+	const Vec3f size = { 1.0f, 20.0f, 100.0f };		//弓のサイズ
+	const Vec3f size1 = { 20.0f, 1.0f, 100.0f };	//弓のサイズ(表示のみ)
+	const float move_speed = 3.0f;					//弓の動くスピード
 
 	//変数---------------------------------------
 
@@ -52,9 +52,9 @@ public:
 	void shift();
 	void draw();
 
-	Vec3f getPos();
-	Vec3f getSize();
-	bool get_is_shooting();
+	Vec3f getPos();				//弓のポジション取得
+	Vec3f getSize();			//弓のサイズ取得
+	bool get_is_shooting();		//弓を放ったかどうかの取得
 
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);

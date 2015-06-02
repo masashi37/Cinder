@@ -27,12 +27,12 @@ enum Window{
 
 //シーンの名前(No.)
 enum SceneName{
-	TITLE,
-	SELECT,
-	
-	ENEMY_BREAKER,
+	TITLE,				//タイトル
+	SELECT,				//選択
 
-	RESULT,
+	ENEMY_BREAKER,		//ゲーム画面1
+
+	RESULT,				//リザルト
 };
 
 
@@ -40,11 +40,11 @@ enum SceneName{
 //-----------------------------------------------
 
 //表示空間
-const float room_depth = 1000;		//部屋のz幅
+const float room_depth = 1000;		//部屋のサイズｚ(奥行)
 class cRoom{
 public:
-	Vec3f pos = { 0, 0, -room_depth / 2 };
-	Vec3f size = { WIDTH, HEIGHT, room_depth };
+	Vec3f pos = { 0, 0, -room_depth / 2 };			//空間ポジション
+	Vec3f size = { WIDTH, HEIGHT, room_depth };		//空間サイズ
 };
 
 //当たり判定
@@ -68,7 +68,7 @@ public:
 
 		return is_hit;
 	}
-
+	//Cube & Aim
 	bool aim_is_hit_cube(
 		Vec2f arrow_pos, Vec2f arrow_size,
 		Vec2f cube_pos, Vec2f cube_size){
@@ -86,27 +86,97 @@ public:
 	}
 };
 
+//パーティクル
+class cParticle{
+private:
+	enum{ PARTICLE_MAX = 20 };		//パーティクルの最大数
+
+	Vec3f pos[PARTICLE_MAX];		//パーティクルポジション
+	Vec3f size[PARTICLE_MAX];		//パーティクルサイズ
+	Vec3f speed[PARTICLE_MAX];		//パーティクル速度
+	Color color[PARTICLE_MAX];		//パーティクル色
+
+	int clear_time;					//パーティクルを消す時間制御
+
+	bool is_ready;					//パーティクルの準備ができているかどうか？
+
+public:
+
+	cParticle::cParticle(){
+
+		clear_time = 0;
+
+		is_ready = false;
+
+		for (int i = 0; i < PARTICLE_MAX; ++i){
+			pos[i] = Vec3f::zero();
+			size[i] = Vec3f::zero();
+			speed[i] = Vec3f::zero();
+			color[i] = { 0, 0, 0 };
+		}
+
+	}
+
+	//パーティクル準備
+	void splitCubeInit(Vec3f cube_pos){
+
+		if (!is_ready){
+			for (int i = 0; i < PARTICLE_MAX; ++i){
+				pos[i] = cube_pos;
+				size[i] = { 10, 10, 10 };
+				speed[i] = {
+					Rand::randFloat(-5, 5),
+					Rand::randFloat(-5, 5),
+					Rand::randFloat(-5, 5)
+				};
+				color[i] = {
+					Rand::randFloat(0, 1),
+					Rand::randFloat(0, 1),
+					Rand::randFloat(0, 1)
+				};
+			}
+			is_ready = true;
+		}
+
+	}
+	//パーティクル
+	void splitCubeDraw(){
+
+		if (is_ready){
+			if (clear_time <= 60){
+				for (int i = 0; i < PARTICLE_MAX; ++i){
+					gl::color(color[i]);
+					gl::drawCube(pos[i], size[i]);
+					gl::color(1, 1, 1);
+
+					pos[i] += speed[i];
+				}
+
+				clear_time++;
+			}
+			else{ 
+				clear_time = 0;
+				is_ready = false; 
+			}
+		}
+
+	}
+
+};
+
 
 //struct-構造体
 //-----------------------------------------------
 
 //画像
 struct TextureData{
-	gl::Texture pic;
-	Vec2f pos;
+	gl::Texture pic;	//画像
+	Vec2f pos;			//表示位置
 };
 
 //オブジェクト
 struct Object{
-	Vec3f pos;
-	Vec3f size;
+	Vec3f pos;			//ポジション
+	Vec3f size;			//サイズ
 };
 
-
-
-//画像の貼り付け
-/*gl::enable(GL_TEXTURE_2D);
-cube_pic.bind();
-//画像の貼り付け解除
-cube_pic.unbind();
-gl::disable(GL_TEXTURE_2D);*/

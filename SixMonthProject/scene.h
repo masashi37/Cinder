@@ -11,9 +11,13 @@ class cScene{
 
 private:
 
+	//クラスを使えるように------------------------------
+
 	cTitle title;
 	cSelect select;
 	cEnemyBreaker enemy_breaker;
+
+	//変数---------------------------------------
 
 	int scene_mover;	//シーンを切り替えるスイッチ
 
