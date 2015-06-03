@@ -40,6 +40,8 @@ private:
 	int time;					//敵の出現を制御する時間
 	int enemy_second;			//敵の出現させる秒数
 	int score;					//スコア
+	int score_plus;				//スコアの加算数
+	int break_count;			//撃破数
 	int aim_gage;				//照準が当たってるかの確認
 
 	float enemy_speed_max;		//敵速度の最大値
@@ -49,7 +51,8 @@ private:
 	bool level_up_is_move;		//level_upのアニメーションが終わったか？
 	bool is_gameover;			//gameoverかどうか？
 
-	Color score_color;			//スコアの色
+	Color score_color_yellow;	//スコアの色(黄)
+	Color score_color_red;		//スコアの色(赤)
 	Color aim_gage_color;		//照準ゲージの色
 
 public:
@@ -60,6 +63,10 @@ public:
 	void update();
 	int shift(int);
 	void draw();
+
+	int getScore();			//スコアの取得
+	int getTime();			//耐久時間の取得
+	int getBreakCount();	//撃破数の取得
 
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);

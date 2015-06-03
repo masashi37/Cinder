@@ -12,6 +12,8 @@ cEnemyBreaker::cEnemyBreaker(){
 	time = 0;
 	enemy_second = 5;
 	score = 0;
+	score_plus = 1;
+	break_count = 0;
 	aim_gage = 50;
 
 	enemy_speed_max = 3.0f;
@@ -22,7 +24,8 @@ cEnemyBreaker::cEnemyBreaker(){
 	is_gameover = false;
 
 	aim_gage_color = { 1, 1, 1 };
-	score_color = { 0.2f, 0.2f, 0 };
+	score_color_yellow = { 0.2f, 0.2f, 0 };
+	score_color_red = { 0.2f, 0, 0 };
 
 }
 
@@ -74,12 +77,16 @@ void cEnemyBreaker::update(){
 		enemy_second = 4;
 		enemy_speed_min = 1.5f;
 
+		score_plus = 2;
+
 		level_up_is_move = true;
 	}
 	if (time == 60 * ((5 * 30) + 1)){
 		enemy_second = 3;
 		enemy_speed_min = 2.0f;
 		enemy_speed_max = 3.5f;
+
+		score_plus = 3;
 
 		level_up_is_move = true;
 	}
@@ -108,8 +115,10 @@ void cEnemyBreaker::update(){
 
 				//敵を削除
 				enemy_it = enemy.erase(enemy_it);
-				score++;
+				score += score_plus;
+				break_count++;
 
+				//パーティクル
 				particle.splitCubeInit(enemyes.pos);
 
 				continue;
@@ -130,7 +139,8 @@ void cEnemyBreaker::update(){
 		//敵がのｚが0以下になったら削除
 		if (enemyes.pos.z > 0){
 			enemy_it = enemy.erase(enemy_it);
-			life--;
+			//life--;
+			score += 10;
 			continue;
 		}
 
@@ -155,7 +165,7 @@ void cEnemyBreaker::update(){
 int cEnemyBreaker::shift(int mover){
 
 	if (is_gameover)
-		mover = RESULT;
+		mover = ENEMY_BREAKER_RESULT;
 
 	return mover;
 }
@@ -197,29 +207,54 @@ void cEnemyBreaker::draw(){
 	//---------------------------------------------------------------------
 	//スコア
 	if (score <= SCORE_BREAK){
-		gl::color(score_color);
+		gl::color(score_color_yellow);
 		gl::drawSolidCircle(
 			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)score * 5);
 	}
 	else if (score <= SCORE_BREAK * 2){
-		gl::color(score_color * 2);
+		gl::color(score_color_red);
 		gl::drawSolidCircle(
 			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK) * 5));
 	}
 	else if (score <= SCORE_BREAK * 3){
-		gl::color(score_color * 3);
+		gl::color(score_color_yellow * 2);
 		gl::drawSolidCircle(
 			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 2) * 5));
 	}
 	else if (score <= SCORE_BREAK * 4){
-		gl::color(score_color * 4);
+		gl::color(score_color_red * 2);
 		gl::drawSolidCircle(
 			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 3) * 5));
 	}
 	else if (score <= SCORE_BREAK * 5){
-		gl::color(score_color * 5);
+		gl::color(score_color_yellow * 3);
 		gl::drawSolidCircle(
 			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 4) * 5));
+	}
+	else if (score <= SCORE_BREAK * 6){
+		gl::color(score_color_red * 3);
+		gl::drawSolidCircle(
+			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 5) * 5));
+	}
+	else if (score <= SCORE_BREAK * 7){
+		gl::color(score_color_yellow * 4);
+		gl::drawSolidCircle(
+			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 6) * 5));
+	}
+	else if (score <= SCORE_BREAK * 8){
+		gl::color(score_color_red * 4);
+		gl::drawSolidCircle(
+			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 7) * 5));
+	}
+	else if (score <= SCORE_BREAK * 9){
+		gl::color(score_color_yellow * 5);
+		gl::drawSolidCircle(
+			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 8) * 5));
+	}
+	else if (score <= SCORE_BREAK * 10){
+		gl::color(score_color_red * 5);
+		gl::drawSolidCircle(
+			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 9) * 5));
 	}
 	gl::color(1, 1, 1);
 
@@ -245,6 +280,20 @@ void cEnemyBreaker::draw(){
 		arrow.draw();
 
 }
+
+
+int cEnemyBreaker::getScore(){
+	return score;
+}
+
+int cEnemyBreaker::getTime(){
+	return time;
+}
+
+int cEnemyBreaker::getBreakCount(){
+	return break_count;
+}
+
 
 void cEnemyBreaker::keyDown(KeyEvent event){
 

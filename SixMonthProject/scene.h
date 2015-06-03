@@ -5,6 +5,7 @@
 #include "title.h"
 #include "select.h"
 #include "enemy_breaker.h"
+#include "enemy_breaker_result.h"
 
 
 class cScene{
@@ -15,13 +16,15 @@ private:
 
 	cTitle title;
 	cSelect select;
-	cEnemyBreaker enemy_breaker;
+	cEnemyBreakerResult enemy_breaker_result;
 
 	//変数---------------------------------------
 
 	int scene_mover;	//シーンを切り替えるスイッチ
 
 public:
+
+	static cEnemyBreaker enemy_breaker;
 
 	cScene::cScene();
 

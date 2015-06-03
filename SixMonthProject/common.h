@@ -10,6 +10,8 @@
 #include "cinder/Rand.h"
 #include <ctime>
 
+#include "cinder/Font.h"
+
 using namespace ci;
 using namespace ci::app;
 
@@ -32,7 +34,7 @@ enum SceneName{
 
 	ENEMY_BREAKER,		//ゲーム画面1
 
-	RESULT,				//リザルト
+	ENEMY_BREAKER_RESULT,				//リザルト
 };
 
 
