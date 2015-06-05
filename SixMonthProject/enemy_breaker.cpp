@@ -4,6 +4,9 @@
 
 cEnemyBreaker::cEnemyBreaker(){
 
+	levelup_pos = { WIDTH, 0 };
+	gameover_pos = { -WIDTH / 2 + 100, -HEIGHT };
+
 	enemy_init = {
 		Vec3f(0, 0, 0), Vec3f(0, 0, 0)
 	};
@@ -21,6 +24,7 @@ cEnemyBreaker::cEnemyBreaker(){
 
 	aim_is_hit = false;
 	level_up_is_move = false;
+	gameover_is_move = false;
 	is_gameover = false;
 
 	aim_gage_color = { 1, 1, 1 };
@@ -30,16 +34,6 @@ cEnemyBreaker::cEnemyBreaker(){
 }
 
 void cEnemyBreaker::init(){
-
-	level_up_pic = {
-		loadImage(loadAsset("enemy_breaker/levelup.png")),
-		Vec2f(WIDTH, 0)
-	};
-
-	gameover_pic = {
-		loadImage(loadAsset("enemy_breaker/gameover.png")),
-		Vec2f(-WIDTH / 2, -HEIGHT)
-	};
 
 	arrow.init();
 
@@ -90,14 +84,22 @@ void cEnemyBreaker::update(){
 
 		level_up_is_move = true;
 	}
+	if (time == 60 * ((5 * 50) + 1)){
+		enemy_speed_min = 3.0f;
+		enemy_speed_max = 4.0f;
+
+		score_plus = 5;
+
+		level_up_is_move = true;
+	}
 
 	//---------------------------------------------------------------------
 	//levelupアニメ
-	if (level_up_pic.pos.x < -WIDTH)
+	if (levelup_pos.x < -WIDTH)
 		level_up_is_move = false;
 	if (level_up_is_move)
-		level_up_pic.pos.x--;
-	else{ level_up_pic.pos.x = WIDTH; }
+		levelup_pos.x -= 2.0f;
+	else{ levelup_pos.x = WIDTH; }
 
 	//---------------------------------------------------------------------
 	//敵のイテレーター作成
@@ -139,8 +141,7 @@ void cEnemyBreaker::update(){
 		//敵がのｚが0以下になったら削除
 		if (enemyes.pos.z > 0){
 			enemy_it = enemy.erase(enemy_it);
-			//life--;
-			score += 10;
+			life--;
 			continue;
 		}
 
@@ -149,9 +150,11 @@ void cEnemyBreaker::update(){
 
 	//---------------------------------------------------------------------
 	//lifeが0でgameover
-	if (life < 0)
-		gameover_pic.pos.y++;
-	if (gameover_pic.pos.y > HEIGHT / 2)
+	if (life < 0){
+		gameover_is_move = true;
+		gameover_pos.y++;
+	}
+	if (gameover_pos.y > HEIGHT / 2)
 		is_gameover = true;
 
 	//---------------------------------------------------------------------
@@ -265,10 +268,22 @@ void cEnemyBreaker::draw(){
 
 	//---------------------------------------------------------------------
 	//levelupアニメ
-	gl::draw(level_up_pic.pic, level_up_pic.pos);
+	if (level_up_is_move){
+		gl::drawString(
+			("LEVEL UP"),
+			levelup_pos, Color(1, 0, 0),
+			Font(loadAsset("font/HoboStd.otf"), 30)
+			);
+	}
 
 	//gameoverアニメ
-	gl::draw(gameover_pic.pic, gameover_pic.pos);
+	if (gameover_is_move){
+		gl::drawString(
+			("GAME OVER"),
+			gameover_pos, Color(1, 0, 0),
+			Font(loadAsset("font/HoboStd.otf"), 50)
+			);
+	}
 
 	//---------------------------------------------------------------------
 	//パーティクル

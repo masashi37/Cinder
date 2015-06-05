@@ -7,11 +7,9 @@ cSelect::cSelect(){
 	for (int i = 0; i < TARGET_MAX; ++i){
 		select_target[i] = {
 			Vec3f(
-			-WIDTH / 2.0f + TARGET_SIZE / 2.0f + (100 * i),
-			-HEIGHT / 2.0f + TARGET_SIZE / 2.0f + (100 * i),
-			-room_depth + TARGET_SIZE / 2.0f
+			-WIDTH / 4.0f + (WIDTH / 2 * i), 0, -room_depth
 			),
-			Vec3f(TARGET_SIZE, TARGET_SIZE, TARGET_SIZE)
+			Vec3f(WIDTH / 2, HEIGHT, TARGET_DEPTH)
 		};
 	}
 

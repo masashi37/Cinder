@@ -5,7 +5,7 @@ cEnemyBreaker cScene::enemy_breaker;
 
 cScene::cScene(){
 
-	scene_mover = ENEMY_BREAKER;
+	scene_mover = SELECT;
 
 }
 
@@ -96,4 +96,3 @@ void cScene::keyUp(KeyEvent event){
 	}
 
 }
-

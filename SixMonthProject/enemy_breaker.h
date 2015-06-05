@@ -23,8 +23,8 @@ private:
 
 	//変数---------------------------------------
 
-	TextureData level_up_pic;			//レベルアップの画像のデータ
-	TextureData gameover_pic;			//ゲームオーバーの画像のデータ
+	Vec2f levelup_pos;			//レベルアップのpos
+	Vec2f gameover_pos;			//ゲームオーバーのpos
 
 	//敵データ
 	struct EnemyData{
@@ -48,7 +48,8 @@ private:
 	float enemy_speed_min;		//敵速度の最小値
 
 	bool aim_is_hit;			//照準が当たってるか？
-	bool level_up_is_move;		//level_upのアニメーションが終わったか？
+	bool level_up_is_move;		//level_upのアニメーションができるか？
+	bool gameover_is_move;		//gameoverのアニメーションができるか？
 	bool is_gameover;			//gameoverかどうか？
 
 	Color score_color_yellow;	//スコアの色(黄)
