@@ -26,22 +26,46 @@ cArrow::cArrow(){
 }
 
 void cArrow::init(){
+	//画像
 	arrow_picture = loadImage(loadAsset("arrow/arrow.png"));
+
+	//SE
+	//--------------------------------------------------
+
+	// 出力デバイスをゲット
+	auto ctx = audio::Context::master();
+
+	// オーディオデータを読み込んで初期化
+	audio::SourceFileRef sourceFile = audio::load(loadAsset("se/arrow_shoot.wav"));
+	audio::BufferRef buffer = sourceFile->loadBuffer();
+	shoot_se = ctx->makeNode(new audio::BufferPlayerNode(buffer));
+
+	// 読み込んだオーディオを出力デバイスに関連付けておく
+	shoot_se >> ctx->getOutput();
+
+	// 出力デバイスを有効にする
+	ctx->enable();
 }
 
 void cArrow::update(){
 
 	//弓を放つ力チャージ
 	if (!is_shoot_arrow){
+
 		if (is_push_space){
 			//チャージ中、弓の速度を変更
 			arrow_speed += plus_speed;
 			if (arrow_speed > SPEED_MAX || arrow_speed < 0)
 				plus_speed *= -1;
 		}
+		else{ back_arrow_pos = Vec2f(pos.x, pos.y); }
 	}
 	//弓の発射
 	if (is_shoot_arrow){
+
+		//SE
+		shoot_se->start();
+
 		//チャージ後、弓に重力をかけて発射
 		gravity += gravity_puls;
 		pos.y += gravity;
@@ -50,14 +74,14 @@ void cArrow::update(){
 		//壁の当たり判定(奥と底)
 		if (pos.z < -room_depth || pos.y > HEIGHT / 2){
 			//当たったら、弓関係の数値を初期化
-			pos = Vec3f::zero();
-			gravity = 0.0f;
-			arrow_speed = 0.0f;
+			pos = { back_arrow_pos.x, back_arrow_pos.y, 0 };
+			gravity = 0;
+			arrow_speed = 0;
 
-			aim_light_begin.x = 0;
-			aim_light_end.x = 0;
-			aim_light_begin.y = 0;
-			aim_light_end.y = 0;
+			aim_light_begin.x =
+				aim_light_end.x = pos.x;
+			aim_light_begin.y =
+				aim_light_end.y = pos.y;
 
 			is_shoot_arrow = false;
 		}
@@ -66,6 +90,7 @@ void cArrow::update(){
 	//---------------------------------------------------------------------
 	//弓の発射位置変更
 	if (!is_shoot_arrow){
+#pragma region move
 		//移動
 		if (is_push_left){
 			pos.x -= move_speed;
@@ -87,8 +112,10 @@ void cArrow::update(){
 			aim_light_begin.y += move_speed;
 			aim_light_end.y += move_speed;
 		}
+#pragma endregion
 
-		//移動制限
+#pragma region move_limit
+//移動制限
 		if (pos.x < -WIDTH / 2){
 			pos.x = -WIDTH / 2;
 			aim_light_begin.x = pos.x;
@@ -109,11 +136,10 @@ void cArrow::update(){
 			aim_light_begin.y = pos.y;
 			aim_light_end.y = pos.y;
 		}
+#pragma endregion		
 	}
 
 }
-
-void cArrow::shift(){}
 
 void cArrow::draw(){
 

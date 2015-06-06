@@ -5,7 +5,7 @@
 cEnemyBreaker::cEnemyBreaker(){
 
 	levelup_pos = { WIDTH, 0 };
-	gameover_pos = { -WIDTH / 2 + 100, -HEIGHT };
+	gameover_pos = { 0, -HEIGHT };
 
 	enemy_init = {
 		Vec3f(0, 0, 0), Vec3f(0, 0, 0)
@@ -36,6 +36,27 @@ cEnemyBreaker::cEnemyBreaker(){
 void cEnemyBreaker::init(){
 
 	arrow.init();
+
+	//font
+	font50 = Font(loadAsset("font/HoboStd.otf"), 50);
+	font30 = Font(loadAsset("font/HoboStd.otf"), 30);
+
+	//SE
+	//--------------------------------------------------
+
+	// 出力デバイスをゲット
+	auto ctx = audio::Context::master();
+
+	// オーディオデータを読み込んで初期化
+	audio::SourceFileRef sourceFile = audio::load(loadAsset("se/arrow_hit.wav"));
+	audio::BufferRef buffer = sourceFile->loadBuffer();
+	hit_se = ctx->makeNode(new audio::BufferPlayerNode(buffer));
+
+	// 読み込んだオーディオを出力デバイスに関連付けておく
+	hit_se >> ctx->getOutput();
+
+	// 出力デバイスを有効にする
+	ctx->enable();
 
 }
 
@@ -117,11 +138,15 @@ void cEnemyBreaker::update(){
 
 				//敵を削除
 				enemy_it = enemy.erase(enemy_it);
-				score += score_plus;
-				break_count++;
 
 				//パーティクル
 				particle.splitCubeInit(enemyes.pos);
+				hit_se->start();
+
+				//リザルト
+				score += score_plus;
+				break_count++;
+
 
 				continue;
 
@@ -193,7 +218,13 @@ void cEnemyBreaker::draw(){
 	//---------------------------------------------------------------------
 	//ライフポイント
 	gl::color(0, 1, 0);
+
 	gl::drawSolidCircle(Vec2f(-WIDTH / 2.0f, -HEIGHT / 2.0f), life * 10.0f);
+	gl::drawString(
+		"LIFE " + std::to_string(life),
+		Vec2f(-WIDTH / 2, -HEIGHT / 2 + life * 10.0f),
+		Color(0, 1, 0), font30);
+
 	gl::color(1, 1, 1);
 
 	//ライフポイントを見やすく
@@ -204,10 +235,17 @@ void cEnemyBreaker::draw(){
 	//---------------------------------------------------------------------
 	//照準ゲージ
 	gl::color(aim_gage_color);
+
 	gl::drawSolidCircle(Vec2f(WIDTH / 2.0f, HEIGHT / 2.0f), (float)aim_gage);
+	gl::drawStringRight(
+		"A I M",
+		Vec2f(WIDTH / 2, HEIGHT / 2 - (float)aim_gage * 2),
+		Color(1, 0, 0), font30);
+
 	gl::color(1, 1, 1);
 
 	//---------------------------------------------------------------------
+#pragma region score
 	//スコア
 	if (score <= SCORE_BREAK){
 		gl::color(score_color_yellow);
@@ -260,6 +298,12 @@ void cEnemyBreaker::draw(){
 			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 9) * 5));
 	}
 	gl::color(1, 1, 1);
+#pragma endregion
+
+	gl::drawStringRight(
+		"SCORE " + std::to_string(score),
+		Vec2f(WIDTH / 2, -HEIGHT / 2 + 150),
+		Color(1, 1, 0), font30);
 
 	//スコアを分かりやすく
 	for (int i = 0; i < 21; ++i){
@@ -270,18 +314,14 @@ void cEnemyBreaker::draw(){
 	//levelupアニメ
 	if (level_up_is_move){
 		gl::drawString(
-			("LEVEL UP"),
-			levelup_pos, Color(1, 0, 0),
-			Font(loadAsset("font/HoboStd.otf"), 30)
+			("LEVEL UP"), levelup_pos, Color(1, 0, 0), font30
 			);
 	}
 
 	//gameoverアニメ
 	if (gameover_is_move){
-		gl::drawString(
-			("GAME OVER"),
-			gameover_pos, Color(1, 0, 0),
-			Font(loadAsset("font/HoboStd.otf"), 50)
+		gl::drawStringCentered(
+			("GAME OVER"), gameover_pos, Color(1, 0, 0), font50
 			);
 	}
 

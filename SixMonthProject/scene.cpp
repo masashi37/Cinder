@@ -5,7 +5,7 @@ cEnemyBreaker cScene::enemy_breaker;
 
 cScene::cScene(){
 
-	scene_mover = SELECT;
+	scene_mover = ENEMY_BREAKER;
 
 }
 
@@ -44,7 +44,7 @@ void cScene::shift(){
 		break;
 	case ENEMY_BREAKER:			scene_mover = enemy_breaker.shift(scene_mover);
 		break;
-	case ENEMY_BREAKER_RESULT:	enemy_breaker_result.shift();
+	case ENEMY_BREAKER_RESULT:	scene_mover = enemy_breaker_result.shift(scene_mover);
 		break;
 	default:
 		break;

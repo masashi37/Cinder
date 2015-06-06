@@ -22,6 +22,10 @@ class cArrow{
 
 	//変数---------------------------------------
 
+	audio::BufferPlayerNodeRef shoot_se;
+
+	Vec2f back_arrow_pos;
+
 	Vec3f pos;						//弓の座標
 	Vec3f aim_light_begin;			//ライトの開始
 	Vec3f aim_light_end;			//ライトの終了
@@ -49,7 +53,6 @@ public:
 
 	void init();
 	void update();
-	void shift();
 	void draw();
 
 	Vec3f getPos();				//弓のポジション取得

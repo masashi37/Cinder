@@ -7,6 +7,9 @@
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
 
+#include "cinder/audio/Context.h"
+#include "cinder/audio/SamplePlayerNode.h"
+
 #include "cinder/Rand.h"
 #include <ctime>
 
@@ -40,7 +43,7 @@ enum SceneName{
 
 //class-クラス
 //-----------------------------------------------
-
+	
 //表示空間
 const float room_depth = 1000;		//部屋のサイズｚ(奥行)
 class cRoom{
@@ -51,6 +54,7 @@ public:
 
 //当たり判定
 class cCollision{
+
 public:
 	//Cube & Arrow
 	bool arrow_is_hit_cube(

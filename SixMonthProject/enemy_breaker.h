@@ -12,10 +12,18 @@ private:
 
 	//クラスを使えるように-------------------------
 
+	//creat
 	cRoom room;
 	cCollision hit;
 	cParticle particle;
 	cArrow arrow;
+
+	//sound
+	audio::BufferPlayerNodeRef hit_se;
+
+	//font
+	Font font50;
+	Font font30;
 
 	//定数---------------------------------------
 
@@ -42,7 +50,7 @@ private:
 	int score;					//スコア
 	int score_plus;				//スコアの加算数
 	int break_count;			//撃破数
-	int aim_gage;				//照準が当たってるかの確認
+	int aim_gage;				//照準のサイズ
 
 	float enemy_speed_max;		//敵速度の最大値
 	float enemy_speed_min;		//敵速度の最小値

@@ -5,7 +5,9 @@
 
 cEnemyBreakerResult::cEnemyBreakerResult(){
 
-	result_pos = { -150, HEIGHT / 2 };
+	result_pos = { 0, HEIGHT / 2 };
+	push_enter_pos = { 0, 175 };
+
 	play_time_pos = { -WIDTH - 300, -125 };
 	score_pos = { WIDTH, -25 };
 	enemy_break_pos = { -WIDTH - 300, 75 };
@@ -18,10 +20,16 @@ cEnemyBreakerResult::cEnemyBreakerResult(){
 	is_ready_time = false;
 	is_ready_score = false;
 	is_ready_break_count = false;
+	is_push_enter = false;
 
 }
 
-void cEnemyBreakerResult::init(){}
+void cEnemyBreakerResult::init(){
+
+	//font
+	font50 = Font(loadAsset("font/HoboStd.otf"), 50);
+
+}
 
 void cEnemyBreakerResult::update(){
 
@@ -71,41 +79,61 @@ void cEnemyBreakerResult::update(){
 				break_count++;
 	}
 
+	//
+	push_enter_show_time++;
+
 }
 
-void cEnemyBreakerResult::shift(){}
+int cEnemyBreakerResult::shift(int mover){
+
+	if (is_push_enter)
+		mover = SELECT;
+
+	return mover;
+}
 
 void cEnemyBreakerResult::draw(){
 
 	//result
-	gl::drawString(
+	gl::drawStringCentered(
 		("R E S U L T"),
-		result_pos, Color(0, 0, 1),
-		Font(loadAsset("font/HoboStd.otf"), 50)
+		result_pos, Color(0, 0, 1), font50
 		);
+	if (is_ready_count_anime){
+		//push [Enter]
+		gl::drawStringCentered(
+			("push [Enter]"),
+			push_enter_pos, Color(0, 0, 1), font50
+			);
+	}
 
 	//プレイ時間
 	gl::drawString(
 		("PlayTime : " + std::to_string(time / 60) + " s"),
-		play_time_pos, Color(1, 1, 1),
-		Font(loadAsset("font/HoboStd.otf"), 50)
+		play_time_pos, Color(1, 1, 1), font50
 		);
 	//スコア
 	gl::drawString(
 		("Score : " + std::to_string(score) + " Point"),
-		score_pos, Color(1, 1, 1),
-		Font(loadAsset("font/HoboStd.otf"), 50)
+		score_pos, Color(1, 1, 1), font50
 		);
 	//撃破数
 	gl::drawString(
 		("Enemy : " + std::to_string(break_count) + " Cube"),
-		enemy_break_pos, Color(1, 1, 1),
-		Font(loadAsset("font/HoboStd.otf"), 50)
+		enemy_break_pos, Color(1, 1, 1), font50
 		);
+
+
 
 }
 
-void cEnemyBreakerResult::keyDown(KeyEvent event){}
+void cEnemyBreakerResult::keyDown(KeyEvent event){
+
+	//Enterを押したら選択画面へ
+	if (event.getCode() == KeyEvent::KEY_RETURN)
+		is_push_enter = true;
+
+}
 
 void cEnemyBreakerResult::keyUp(KeyEvent event){}
 
