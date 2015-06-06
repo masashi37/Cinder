@@ -61,12 +61,12 @@ public:
 		scene.update();
 		scene.shift();
 
-		if (!is_start_bgm){
+		/*if (!is_start_bgm){
 			bgm->start();
 			is_start_bgm = true;
 		}
 		if (bgm->isEof())
-			is_start_bgm = false;
+			is_start_bgm = false;*/
 
 	};
 

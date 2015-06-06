@@ -63,9 +63,6 @@ void cArrow::update(){
 	//弓の発射
 	if (is_shoot_arrow){
 
-		//SE
-		shoot_se->start();
-
 		//チャージ後、弓に重力をかけて発射
 		gravity += gravity_puls;
 		pos.y += gravity;
@@ -115,7 +112,7 @@ void cArrow::update(){
 #pragma endregion
 
 #pragma region move_limit
-//移動制限
+		//移動制限
 		if (pos.x < -WIDTH / 2){
 			pos.x = -WIDTH / 2;
 			aim_light_begin.x = pos.x;
@@ -143,6 +140,7 @@ void cArrow::update(){
 
 void cArrow::draw(){
 
+	//貼り付け
 	gl::enable(GL_TEXTURE_2D);
 	arrow_picture.bind();
 
@@ -150,8 +148,12 @@ void cArrow::draw(){
 	gl::drawCube(pos, size);
 	gl::drawCube(pos, size1);
 
+	//貼り付け解除
 	arrow_picture.unbind();
 	gl::disable(GL_TEXTURE_2D);
+
+	//矢を見やすく
+	gl::drawStrokedCircle(pos.xy(), 20);
 
 	//矢の照準
 	if (!is_shoot_arrow)
@@ -215,6 +217,9 @@ void cArrow::keyUp(KeyEvent event){
 
 	//パワーチャージ終了
 	if (event.getCode() == KeyEvent::KEY_SPACE){
+		//SE
+		shoot_se->start();
+
 		is_push_space = false;
 		is_shoot_arrow = true;
 	}

@@ -33,6 +33,7 @@ private:
 
 	Vec2f levelup_pos;			//レベルアップのpos
 	Vec2f gameover_pos;			//ゲームオーバーのpos
+	Vec2f game_start_pos;		//ゲームスタートのpos
 
 	//敵データ
 	struct EnemyData{
@@ -52,6 +53,8 @@ private:
 	int break_count;			//撃破数
 	int aim_gage;				//照準のサイズ
 
+	int tutorial_time;			//tutorialの時間
+
 	float enemy_speed_max;		//敵速度の最大値
 	float enemy_speed_min;		//敵速度の最小値
 
@@ -59,6 +62,9 @@ private:
 	bool level_up_is_move;		//level_upのアニメーションができるか？
 	bool gameover_is_move;		//gameoverのアニメーションができるか？
 	bool is_gameover;			//gameoverかどうか？
+
+	bool is_end_tutorial;		//tutorialは終わったか？
+	bool is_push_back_cube;		//cubeが作られたかどうか？
 
 	Color score_color_yellow;	//スコアの色(黄)
 	Color score_color_red;		//スコアの色(赤)

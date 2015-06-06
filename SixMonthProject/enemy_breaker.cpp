@@ -6,6 +6,7 @@ cEnemyBreaker::cEnemyBreaker(){
 
 	levelup_pos = { WIDTH, 0 };
 	gameover_pos = { 0, -HEIGHT };
+	game_start_pos = { 0, -HEIGHT / 2 - 30 };
 
 	enemy_init = {
 		Vec3f(0, 0, 0), Vec3f(0, 0, 0)
@@ -18,6 +19,7 @@ cEnemyBreaker::cEnemyBreaker(){
 	score_plus = 1;
 	break_count = 0;
 	aim_gage = 50;
+	tutorial_time = 0;
 
 	enemy_speed_max = 3.0f;
 	enemy_speed_min = 1.0f;
@@ -26,6 +28,8 @@ cEnemyBreaker::cEnemyBreaker(){
 	level_up_is_move = false;
 	gameover_is_move = false;
 	is_gameover = false;
+	is_end_tutorial = false;
+	is_push_back_cube = false;
 
 	aim_gage_color = { 1, 1, 1 };
 	score_color_yellow = { 0.2f, 0.2f, 0 };
@@ -62,28 +66,51 @@ void cEnemyBreaker::init(){
 
 void cEnemyBreaker::update(){
 
+	//チュートリアル
+	if (!is_end_tutorial){
+		tutorial_time++;
+
+		if (tutorial_time % 60 == 0){
+
+			enemy_init.size = Vec3f(100, 100, 100);
+			enemy_init.pos = Vec3f(150, 0, -room_depth + enemy_init.size.z / 2);
+
+			if (!is_push_back_cube){
+				enemy.push_back(enemy_init);
+				is_push_back_cube = true;
+			}
+		}
+
+	}
+	else{
+		game_start_pos.y += 2.5f;
+	}
+
+	//体力が残ってたら弓を表示
 	if (life >= 0)
 		arrow.update();
 
 	//---------------------------------------------------------------------
 	//敵出現
-	time++;
-	if ((time % (60 * enemy_second)) == 0){
+	if (is_end_tutorial){
+		time++;
+		if ((time % (60 * enemy_second)) == 0){
 
-		enemy_init.size = Vec3f(
-			Rand::randFloat(30, 80),
-			Rand::randFloat(30, 80),
-			Rand::randFloat(30, 80)
-			);
-		enemy_init.pos = Vec3f(
-			Rand::randFloat(-WIDTH / 2 + enemy_init.size.x / 2, WIDTH / 2 - enemy_init.size.x / 2),
-			Rand::randFloat(-HEIGHT / 2 + enemy_init.size.y / 2, HEIGHT / 2 - enemy_init.size.y / 2),
-			-room_depth + enemy_init.size.z / 2
-			);
+			enemy_init.size = Vec3f(
+				Rand::randFloat(30, 80),
+				Rand::randFloat(30, 80),
+				Rand::randFloat(30, 80)
+				);
+			enemy_init.pos = Vec3f(
+				Rand::randFloat(-WIDTH / 2 + enemy_init.size.x / 2, WIDTH / 2 - enemy_init.size.x / 2),
+				Rand::randFloat(-HEIGHT / 2 + enemy_init.size.y / 2, HEIGHT / 2 - enemy_init.size.y / 2),
+				-room_depth + enemy_init.size.z / 2
+				);
 
-		enemy_init.speed = Rand::randFloat(enemy_speed_min, enemy_speed_max);
+			enemy_init.speed = Rand::randFloat(enemy_speed_min, enemy_speed_max);
 
-		enemy.push_back(enemy_init);
+			enemy.push_back(enemy_init);
+		}
 	}
 
 	//---------------------------------------------------------------------
@@ -138,15 +165,17 @@ void cEnemyBreaker::update(){
 
 				//敵を削除
 				enemy_it = enemy.erase(enemy_it);
+				is_push_back_cube = false;
 
 				//パーティクル
 				particle.splitCubeInit(enemyes.pos);
 				hit_se->start();
 
 				//リザルト
-				score += score_plus;
-				break_count++;
-
+				if (is_end_tutorial){
+					score += score_plus;
+					break_count++;
+				}
 
 				continue;
 
@@ -160,6 +189,7 @@ void cEnemyBreaker::update(){
 			Vec2f(enemyes.pos.x, enemyes.pos.y),
 			Vec2f(enemyes.size.x, enemyes.size.y))){
 			aim_is_hit = true;
+			break;
 		}
 		else{ aim_is_hit = false; }
 
@@ -203,6 +233,41 @@ void cEnemyBreaker::draw(){
 	//空間表示
 	gl::drawStrokedCube(room.pos, room.size);
 
+	//--------------------------------------------------------------------
+	//チュートリアル
+
+	if (!is_end_tutorial){
+
+		gl::drawStringCentered(
+			"Skip tutorial [Enter]",
+			Vec2f(0, HEIGHT / 2 - 70), Color(0, 0, 1), font30);
+
+		if (tutorial_time > 60 * 5){
+			gl::drawStringCentered(
+				"Move Press [CROSS KEY]",
+				Vec2f(0, 30), Color(1, 0, 0), font30);
+			if (tutorial_time > 60 * 10){
+				gl::drawStringCentered(
+					"Aim hit cube = Aim lighting",
+					Vec2f(0, 60), Color(1, 0, 0), font30);
+				if (tutorial_time > 60 * 15){
+					gl::drawStringCentered(
+						"Shooting Press [SPACE KEY]",
+						Vec2f(0, 90), Color(1, 0, 0), font30);
+				}
+			}
+		}
+
+	}
+	else{
+		if (game_start_pos.y > -WIDTH / 2 - 50 &&
+			game_start_pos.y < WIDTH / 2 + 50){
+			gl::drawStringCentered(
+				"Game Start",
+				game_start_pos, Color(0, 0, 1), font50);
+		}
+	}
+
 	//---------------------------------------------------------------------
 	//敵
 	for (auto& enemyes : enemy){
@@ -239,76 +304,18 @@ void cEnemyBreaker::draw(){
 	gl::drawSolidCircle(Vec2f(WIDTH / 2.0f, HEIGHT / 2.0f), (float)aim_gage);
 	gl::drawStringRight(
 		"A I M",
-		Vec2f(WIDTH / 2, HEIGHT / 2 - (float)aim_gage * 2),
+		Vec2f(WIDTH / 2 - 50, HEIGHT / 2 - 30),
 		Color(1, 0, 0), font30);
 
 	gl::color(1, 1, 1);
 
 	//---------------------------------------------------------------------
-#pragma region score
-	//スコア
-	if (score <= SCORE_BREAK){
-		gl::color(score_color_yellow);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)score * 5);
-	}
-	else if (score <= SCORE_BREAK * 2){
-		gl::color(score_color_red);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK) * 5));
-	}
-	else if (score <= SCORE_BREAK * 3){
-		gl::color(score_color_yellow * 2);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 2) * 5));
-	}
-	else if (score <= SCORE_BREAK * 4){
-		gl::color(score_color_red * 2);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 3) * 5));
-	}
-	else if (score <= SCORE_BREAK * 5){
-		gl::color(score_color_yellow * 3);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 4) * 5));
-	}
-	else if (score <= SCORE_BREAK * 6){
-		gl::color(score_color_red * 3);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 5) * 5));
-	}
-	else if (score <= SCORE_BREAK * 7){
-		gl::color(score_color_yellow * 4);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 6) * 5));
-	}
-	else if (score <= SCORE_BREAK * 8){
-		gl::color(score_color_red * 4);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 7) * 5));
-	}
-	else if (score <= SCORE_BREAK * 9){
-		gl::color(score_color_yellow * 5);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 8) * 5));
-	}
-	else if (score <= SCORE_BREAK * 10){
-		gl::color(score_color_red * 5);
-		gl::drawSolidCircle(
-			Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)((score - SCORE_BREAK * 9) * 5));
-	}
-	gl::color(1, 1, 1);
-#pragma endregion
 
+	//スコア
 	gl::drawStringRight(
 		"SCORE " + std::to_string(score),
-		Vec2f(WIDTH / 2, -HEIGHT / 2 + 150),
+		Vec2f(WIDTH / 2, -HEIGHT / 2),
 		Color(1, 1, 0), font30);
-
-	//スコアを分かりやすく
-	for (int i = 0; i < 21; ++i){
-		gl::drawStrokedCircle(Vec2f(WIDTH / 2.0f, -HEIGHT / 2.0f), (float)(5.0f * i));
-	}
 
 	//---------------------------------------------------------------------
 	//levelupアニメ
@@ -356,6 +363,13 @@ void cEnemyBreaker::keyDown(KeyEvent event){
 	if (life >= 0)
 		arrow.keyDown(event);
 
+	//チュートリアルの終了
+	if (!is_end_tutorial)
+		if (event.getCode() == KeyEvent::KEY_RETURN){
+			is_end_tutorial = true;
+			enemy.clear();
+		}
+
 }
 
 void cEnemyBreaker::keyUp(KeyEvent event){
@@ -365,3 +379,4 @@ void cEnemyBreaker::keyUp(KeyEvent event){
 		arrow.keyUp(event);
 
 }
+
