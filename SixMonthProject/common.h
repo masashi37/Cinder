@@ -33,17 +33,18 @@ enum Window{
 //シーンの名前(No.)
 enum SceneName{
 	TITLE,				//タイトル
+
 	SELECT,				//選択
 
 	ENEMY_BREAKER,		//ゲーム画面1
 
-	ENEMY_BREAKER_RESULT,				//リザルト
+	ENEMY_BREAKER_RESULT,		//リザルト1
 };
 
 
 //class-クラス
 //-----------------------------------------------
-	
+
 //表示空間
 const float room_depth = 1000;		//部屋のサイズｚ(奥行)
 class cRoom{
@@ -95,12 +96,12 @@ public:
 //パーティクル
 class cParticle{
 private:
-	enum{ PARTICLE_MAX = 20 };		//パーティクルの最大数
+	enum{ PARTICLE_MAX = 50 };		//パーティクルの最大数
 
 	Vec3f pos[PARTICLE_MAX];		//パーティクルポジション
 	Vec3f size[PARTICLE_MAX];		//パーティクルサイズ
 	Vec3f speed[PARTICLE_MAX];		//パーティクル速度
-	Color color[PARTICLE_MAX];		//パーティクル色
+	ColorA color[PARTICLE_MAX];		//パーティクル色
 
 	int clear_time;					//パーティクルを消す時間制御
 
@@ -118,17 +119,17 @@ public:
 			pos[i] = Vec3f::zero();
 			size[i] = Vec3f::zero();
 			speed[i] = Vec3f::zero();
-			color[i] = { 0, 0, 0 };
+			color[i] = { 0, 0, 0, 1 };
 		}
 
 	}
 
 	//パーティクル準備
-	void splitCubeInit(Vec3f cube_pos){
+	void splitCubeInit(Vec3f particle_pos){
 
 		if (!is_ready){
 			for (int i = 0; i < PARTICLE_MAX; ++i){
-				pos[i] = cube_pos;
+				pos[i] = particle_pos;
 				size[i] = { 10, 10, 10 };
 				speed[i] = {
 					Rand::randFloat(-5, 5),
@@ -138,7 +139,8 @@ public:
 				color[i] = {
 					Rand::randFloat(0, 1),
 					Rand::randFloat(0, 1),
-					Rand::randFloat(0, 1)
+					Rand::randFloat(0, 1),
+					1
 				};
 			}
 			is_ready = true;
@@ -156,13 +158,16 @@ public:
 					gl::color(1, 1, 1);
 
 					pos[i] += speed[i];
+					if (color[i].a >= 0)
+						color[i].a -= 0.02f;
 				}
 
 				clear_time++;
+
 			}
-			else{ 
+			else{
 				clear_time = 0;
-				is_ready = false; 
+				is_ready = false;
 			}
 		}
 

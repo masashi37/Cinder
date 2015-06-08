@@ -5,7 +5,7 @@ cEnemyBreaker cScene::enemy_breaker;
 
 cScene::cScene(){
 
-	scene_mover = ENEMY_BREAKER;
+	scene_mover = SELECT;
 
 }
 
@@ -13,6 +13,7 @@ void cScene::init(){
 
 	title.init();
 	select.init();
+
 	enemy_breaker.init();
 	enemy_breaker_result.init();
 
@@ -21,13 +22,20 @@ void cScene::init(){
 void cScene::update(){
 
 	switch (scene_mover){
-	case TITLE:					title.update();
+	case TITLE:
+		title.update();
 		break;
-	case SELECT:				select.update();
+	case SELECT:
+		enemy_breaker.reStartInit();
+		select.update();
 		break;
-	case ENEMY_BREAKER:			enemy_breaker.update();
+	case ENEMY_BREAKER:
+		enemy_breaker_result.reStartInit();
+		enemy_breaker.update();
 		break;
-	case ENEMY_BREAKER_RESULT:	enemy_breaker_result.update();
+	case ENEMY_BREAKER_RESULT:
+		select.reStartInit();
+		enemy_breaker_result.update();
 		break;
 	default:
 		break;
@@ -45,8 +53,6 @@ void cScene::shift(){
 	case ENEMY_BREAKER:			scene_mover = enemy_breaker.shift(scene_mover);
 		break;
 	case ENEMY_BREAKER_RESULT:	scene_mover = enemy_breaker_result.shift(scene_mover);
-		break;
-	default:
 		break;
 	}
 

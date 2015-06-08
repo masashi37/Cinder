@@ -8,7 +8,7 @@
 
 class cEnemyBreakerResult{
 
-private:
+private:    
 
 	//font
 	Font font50;
@@ -26,14 +26,15 @@ private:
 	int time;					//プレイ時間
 	int score;					//スコア
 	int break_count;			//撃破数
-	int push_enter_show_time;	//push [Enter]
 
 	bool is_ready_count_anime;	//カウントアニメの準備ができてるかどうか？
+
 	bool is_ready_time;			//時間カウントの準備ができてるかどうか？
 	bool is_ready_score;		//スコアカウントの準備ができてるかどうか？
 	bool is_ready_break_count;	//撃破数カウントの準備ができてるかどうか？
-	bool is_push_enter;			//エンターが押されたかどうか？
 
+	bool is_ready_shift;		//シフトが可能かどうか？
+	bool is_push_enter;			//エンターが押されたかどうか？
 
 public:
 
@@ -43,6 +44,8 @@ public:
 	void update();
 	int shift(int);
 	void draw();
+
+	void reStartInit();
 
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);

@@ -55,6 +55,7 @@ public:
 	void update();
 	void draw();
 
+	void setInit();				//弓のポジション初期化
 	Vec3f getPos();				//弓のポジション取得
 	Vec3f getSize();			//弓のサイズ取得
 	bool get_is_shooting();		//弓を放ったかどうかの取得

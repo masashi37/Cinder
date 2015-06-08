@@ -27,6 +27,9 @@ void cTitle::init(){
 	arrow_pic = { loadImage(loadAsset("title/arrow.png")),
 	{ WIDTH / 2 + 100, -HEIGHT / 2 + 120 } };
 
+	//font
+	font = Font(loadAsset("font/HoboStd.otf"), 30);
+
 	arrow.init();
 
 }
@@ -56,15 +59,15 @@ void cTitle::update(){
 				is_ready_title_logo = true;
 		}
 	}
-	//タイトルロゴの準備が完了
-	else{
-		//ステージ選択ロゴの動作開始
-		stage_select_pic.pos.x += stage_logo_speed;
 
-		if (stage_select_pic.pos.x - stage_select_pic.pic.getSize().x / 2 < -WIDTH / 2 ||
-			stage_select_pic.pos.x + stage_select_pic.pic.getSize().x / 2 > WIDTH / 2)
-			stage_logo_speed *= -1;
-
+	//パーティクル
+	particle_time++;
+	if (particle_time % (60 * 2) == 0){
+		particle.splitCubeInit(Vec3f(
+			Rand::randFloat(-WIDTH / 2, WIDTH / 2),
+			Rand::randFloat(-HEIGHT / 2, HEIGHT / 2),
+			Rand::randFloat(0, -room_depth / 2))
+			);
 	}
 
 	arrow.update();
@@ -73,14 +76,16 @@ void cTitle::update(){
 
 int cTitle::shift(int mover){
 
-	if (arrow.get_is_shooting()){
-		if (hit.arrow_is_hit_cube(
-			arrow.getPos(), arrow.getSize(),
-			Vec3f(stage_select_pic.pos, stage_logo_pos_z),
-			Vec3f(stage_select_pic.pic.getSize(), stage_logo_size_z))){
-			
-			mover = SELECT;
-		
+	if (is_ready_title_logo){
+		if (arrow.get_is_shooting()){
+			if (hit.arrow_is_hit_cube(
+				arrow.getPos(), arrow.getSize(),
+				Vec3f(0, 0, stage_logo_pos_z),
+				Vec3f(WIDTH, HEIGHT, stage_logo_size_z))){
+
+				mover = SELECT;
+
+			}
 		}
 	}
 
@@ -94,6 +99,10 @@ void cTitle::draw(){
 
 	//ロゴ
 	gl::draw(logo_pic.pic, logo_pic.pos);
+
+	//------------------------------------------------
+	//アニメーション
+
 	//矢
 	gl::draw(arrow_pic.pic, arrow_pic.pos);
 
@@ -103,7 +112,7 @@ void cTitle::draw(){
 		gl::color(0.5f, 0.5f, 0.5f);
 		gl::drawCube(
 			Vec3f(stage_select_pic.pos, stage_logo_pos_z),
-			Vec3f(stage_select_pic.pic.getSize(), stage_logo_size_z)
+			Vec3f(WIDTH, HEIGHT, stage_logo_size_z)
 			);
 		gl::color(1, 1, 1);
 
@@ -121,8 +130,25 @@ void cTitle::draw(){
 
 	}
 
+	//---------------------------------------------------
+	//font
+	gl::drawStringCentered(
+		"<Arrow operate>",
+		Vec2f(0, 70), Color(1, 0, 0), font);
+	gl::drawStringCentered(
+		"Move : Press [CROSS KEY]",
+		Vec2f(0, 100), Color(1, 0, 0), font);
+	gl::drawStringCentered(
+		"Shooting : Press [SPACE KEY]",
+		Vec2f(0, 130), Color(1, 0, 0), font);
+
+	//------------------------------------------------
 	//弓矢
 	arrow.draw();
+
+	//----------------------------------------------
+	//パーティクル
+	particle.splitCubeDraw();
 
 }
 

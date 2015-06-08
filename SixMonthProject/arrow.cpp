@@ -58,7 +58,6 @@ void cArrow::update(){
 			if (arrow_speed > SPEED_MAX || arrow_speed < 0)
 				plus_speed *= -1;
 		}
-		else{ back_arrow_pos = Vec2f(pos.x, pos.y); }
 	}
 	//弓の発射
 	if (is_shoot_arrow){
@@ -172,6 +171,21 @@ void cArrow::draw(){
 	}
 }
 
+
+void cArrow::setInit(){
+	pos = Vec3f::zero();
+
+	aim_light_begin.x = 0;
+	aim_light_begin.y = 0;
+	aim_light_end.x = 0;
+	aim_light_end.y = 0;
+	
+	gravity = 0;
+	arrow_speed = 0;
+	
+	is_shoot_arrow = false;
+}
+
 Vec3f cArrow::getPos(){
 	return pos;
 }
@@ -183,6 +197,7 @@ Vec3f cArrow::getSize(){
 bool cArrow::get_is_shooting(){
 	return is_shoot_arrow;
 }
+
 
 void cArrow::keyDown(KeyEvent event){
 
@@ -217,8 +232,9 @@ void cArrow::keyUp(KeyEvent event){
 
 	//パワーチャージ終了
 	if (event.getCode() == KeyEvent::KEY_SPACE){
-		//SE
-		shoot_se->start();
+		shoot_se->start();		//SE
+
+		back_arrow_pos = Vec2f(pos.x, pos.y);
 
 		is_push_space = false;
 		is_shoot_arrow = true;

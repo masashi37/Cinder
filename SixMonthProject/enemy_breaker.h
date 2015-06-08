@@ -25,10 +25,6 @@ private:
 	Font font50;
 	Font font30;
 
-	//定数---------------------------------------
-
-	const int SCORE_BREAK = 20;			//スコアの区切り
-
 	//変数---------------------------------------
 
 	Vec2f levelup_pos;			//レベルアップのpos
@@ -40,6 +36,7 @@ private:
 		Vec3f pos;
 		Vec3f size;
 		float speed;
+		Color color;
 	};
 	std::list<EnemyData>enemy;					//敵
 	std::list<EnemyData>::iterator enemy_it;	//敵のイテレーター
@@ -58,7 +55,6 @@ private:
 	float enemy_speed_max;		//敵速度の最大値
 	float enemy_speed_min;		//敵速度の最小値
 
-	bool aim_is_hit;			//照準が当たってるか？
 	bool level_up_is_move;		//level_upのアニメーションができるか？
 	bool gameover_is_move;		//gameoverのアニメーションができるか？
 	bool is_gameover;			//gameoverかどうか？
@@ -82,6 +78,8 @@ public:
 	int getScore();			//スコアの取得
 	int getTime();			//耐久時間の取得
 	int getBreakCount();	//撃破数の取得
+
+	void reStartInit();
 
 	void keyDown(KeyEvent);
 	void keyUp(KeyEvent);

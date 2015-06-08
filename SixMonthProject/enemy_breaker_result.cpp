@@ -17,9 +17,12 @@ cEnemyBreakerResult::cEnemyBreakerResult(){
 	break_count = 0;
 
 	is_ready_count_anime = false;
+
 	is_ready_time = false;
 	is_ready_score = false;
 	is_ready_break_count = false;
+
+	is_ready_shift = false;
 	is_push_enter = false;
 
 }
@@ -65,23 +68,26 @@ void cEnemyBreakerResult::update(){
 	if (is_ready_time && is_ready_score && is_ready_break_count)
 		is_ready_count_anime = true;
 
-	//カウントアニメ
+	//カウント
 	if (is_ready_count_anime){
 
 		if (is_ready_time)
-			if (time <= cScene::enemy_breaker.getTime())
+			if (time < cScene::enemy_breaker.getTime())
 				time += 60;
 		if (is_ready_score)
-			if (score <= cScene::enemy_breaker.getScore())
+			if (score < cScene::enemy_breaker.getScore())
 				score++;
 		if (is_ready_break_count)
-			if (break_count <= cScene::enemy_breaker.getBreakCount())
+			if (break_count < cScene::enemy_breaker.getBreakCount())
 				break_count++;
+
+		if (time >= cScene::enemy_breaker.getTime() &&
+			score >= cScene::enemy_breaker.getScore() &&
+			break_count >= cScene::enemy_breaker.getBreakCount()){
+			is_ready_shift = true;
+		}
+
 	}
-
-	//
-	push_enter_show_time++;
-
 }
 
 int cEnemyBreakerResult::shift(int mover){
@@ -127,11 +133,38 @@ void cEnemyBreakerResult::draw(){
 
 }
 
+
+void cEnemyBreakerResult::reStartInit(){
+
+	result_pos = { 0, HEIGHT / 2 };
+	push_enter_pos = { 0, 175 };
+
+	play_time_pos = { -WIDTH - 300, -125 };
+	score_pos = { WIDTH, -25 };
+	enemy_break_pos = { -WIDTH - 300, 75 };
+
+	time = 0;
+	score = 0;
+	break_count = 0;
+
+	is_ready_count_anime = false;
+
+	is_ready_time = false;
+	is_ready_score = false;
+	is_ready_break_count = false;
+
+	is_ready_shift = false;
+	is_push_enter = false;
+
+}
+
+
 void cEnemyBreakerResult::keyDown(KeyEvent event){
 
 	//Enterを押したら選択画面へ
 	if (event.getCode() == KeyEvent::KEY_RETURN)
-		is_push_enter = true;
+		if (is_ready_shift)
+			is_push_enter = true;
 
 }
 

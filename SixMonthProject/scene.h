@@ -4,6 +4,7 @@
 #include "common.h"
 #include "title.h"
 #include "select.h"
+
 #include "enemy_breaker.h"
 #include "enemy_breaker_result.h"
 
@@ -16,6 +17,7 @@ private:
 
 	cTitle title;
 	cSelect select;
+
 	cEnemyBreakerResult enemy_breaker_result;
 
 	//•Ï”---------------------------------------

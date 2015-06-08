@@ -12,8 +12,12 @@ class cTitle{
 	cRoom room;
 	cCollision hit;
 	cArrow arrow;
+	cParticle particle;
 
 	Rand random;
+
+	//font
+	Font font;
 
 	//変数---------------------------------------
 
@@ -22,12 +26,16 @@ class cTitle{
 
 	TextureData arrow_pic;			//矢
 
+	int particle_time;				//パーティクルの時間
+
 	float logo_fadein_speed;		//タイトルロゴのフェードイン速度
 	float arrow_fadein_speed;		//矢のフェードイン速度
 	float stage_logo_speed;			//ステージ選択ロゴの速度
 
 	float stage_logo_pos_z;			//選択ロゴのz座標
 	float stage_logo_size_z;		//選択ロゴのzサイズ
+
+
 
 	bool is_in_arrow_pic;			//矢を飛ばすアニメーション
 	bool is_ready_title_logo;		//タイトルロゴのフェードインが完了したか？
