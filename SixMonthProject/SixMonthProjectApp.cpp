@@ -68,6 +68,8 @@ public:
 		if (bgm->isEof())
 			is_start_bgm = false;
 
+		Rand::randomize();
+
 	};
 
 	void draw(){

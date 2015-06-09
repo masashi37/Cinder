@@ -62,7 +62,8 @@ int cSelect::shift(int mover){
 	if (is_ready_shift){
 		if (select_number == 0)
 			mover = ENEMY_BREAKER;
-		if (select_number == 1);
+		if (select_number == 1)
+			mover = ENEMY_BREAKER2;
 	}
 
 	return mover;
@@ -87,7 +88,7 @@ void cSelect::draw(){
 
 	gl::translate(0, 0, -room_depth);
 
-	gl::drawString("E A S Y",
+	gl::drawString("NORMAL",
 		left_select_pos, Color(0, 1, 1), font);
 	gl::drawStringRight("H A R D",
 		right_select_pos, Color(0, 1, 1), font);

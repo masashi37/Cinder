@@ -37,8 +37,10 @@ enum SceneName{
 	SELECT,				//選択
 
 	ENEMY_BREAKER,		//ゲーム画面1
+	ENEMY_BREAKER2,		//ゲーム画面2
 
 	ENEMY_BREAKER_RESULT,		//リザルト1
+	ENEMY_BREAKER_RESULT2,		//リザルト2
 };
 
 

@@ -6,7 +6,7 @@
 #include <memory>
 
 
-class cEnemyBreaker{
+class cEnemyBreaker2{
 
 private:
 
@@ -35,8 +35,14 @@ private:
 	struct EnemyData{
 		Vec3f pos;
 		Vec3f size;
-		float speed;
+		Vec3f speed;
 		Color color;
+		int move_pattern;
+		float angle;
+	};
+	enum MOVE_MODE{
+		WAVE,
+		SIDE_WAVE
 	};
 	std::list<EnemyData>enemy;					//敵
 	std::list<EnemyData>::iterator enemy_it;	//敵のイテレーター
@@ -49,26 +55,21 @@ private:
 	int score_plus;				//スコアの加算数
 	int break_count;			//撃破数
 
-	int tutorial_time;			//tutorialの時間
-
 	float aim_gage;				//照準のサイズ
 	float enemy_speed_max;		//敵速度の最大値
 	float enemy_speed_min;		//敵速度の最小値
+	float wave_spped;			//敵の速度
+	float angle_plus;			//敵の移動変化速度
 
 	bool level_up_is_move;		//level_upのアニメーションができるか？
 	bool gameover_is_move;		//gameoverのアニメーションができるか？
 	bool is_gameover;			//gameoverかどうか？
 
-	bool is_end_tutorial;		//tutorialは終わったか？
-	bool is_push_back_cube;		//cubeが作られたかどうか？
-
-	Color score_color_yellow;	//スコアの色(黄)
-	Color score_color_red;		//スコアの色(赤)
 	Color aim_gage_color;		//照準ゲージの色
 
 public:
 
-	cEnemyBreaker::cEnemyBreaker();
+	cEnemyBreaker2::cEnemyBreaker2();
 
 	void init();
 	void update();

@@ -7,6 +7,8 @@
 
 #include "enemy_breaker.h"
 #include "enemy_breaker_result.h"
+#include "enemy_breaker2.h"
+#include "enemy_breaker_result2.h"
 
 
 class cScene{
@@ -19,6 +21,7 @@ private:
 	cSelect select;
 
 	cEnemyBreakerResult enemy_breaker_result;
+	cEnemyBreakerResult2 enemy_breaker_result2;
 
 	//•Ï”---------------------------------------
 
@@ -27,6 +30,7 @@ private:
 public:
 
 	static cEnemyBreaker enemy_breaker;
+	static cEnemyBreaker2 enemy_breaker2;
 
 	cScene::cScene();
 
