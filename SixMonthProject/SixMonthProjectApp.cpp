@@ -124,9 +124,9 @@ public:
 
 	void keyDown(KeyEvent event){
 
-		if (volume >= 0.0f){
-			volume_is_show = true;
-			if (event.getCode() == KeyEvent::KEY_x){
+		if (event.getCode() == KeyEvent::KEY_x){
+			if (volume >= 0.0f){
+				volume_is_show = true;
 				volume += 0.1f;
 				scene.enemy_breaker.volume += 0.1f;
 				scene.enemy_breaker2.volume += 0.1f;
@@ -136,9 +136,9 @@ public:
 			if (scene.enemy_breaker2.volume > 1.0f)scene.enemy_breaker2.volume = 1.0f;
 		}
 
-		if (volume <= 1.0f){
-			volume_is_show = true;
-			if (event.getCode() == KeyEvent::KEY_z){
+		if (event.getCode() == KeyEvent::KEY_z){
+			if (volume <= 1.0f){
+				volume_is_show = true;
 				volume -= 0.1f;
 				scene.enemy_breaker.volume -= 0.1f;
 				scene.enemy_breaker2.volume -= 0.1f;

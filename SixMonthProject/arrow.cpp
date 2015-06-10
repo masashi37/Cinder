@@ -53,7 +53,6 @@ void cArrow::init(){
 void cArrow::update(){
 
 	gain->setValue(volume);
-	console() << volume << std::endl;
 
 	//弓を放つ力チャージ
 	if (!is_shoot_arrow){
@@ -182,7 +181,7 @@ void cArrow::draw(){
 
 void cArrow::setInit(){
 	pos = Vec3f::zero();
-	
+
 	aim_line_color = { Color(1, 1, 1) };
 
 	aim_light_begin.x = 0;
@@ -236,14 +235,14 @@ void cArrow::keyDown(KeyEvent event){
 	}
 
 	//ボリューム
-	if (volume >= 0.0f){
-		if (event.getCode() == KeyEvent::KEY_x){
+	if (event.getCode() == KeyEvent::KEY_x){
+		if (volume >= 0.0f){
 			volume += 0.1f;
 		}
 		if (volume > 1.0f)volume = 1.0f;
 	}
-	if (volume <= 1.0f){
-		if (event.getCode() == KeyEvent::KEY_z){
+	if (event.getCode() == KeyEvent::KEY_z){
+		if (volume <= 1.0f){
 			volume -= 0.1f;
 		}
 		if (volume < 0.0f)volume = 0.0f;
