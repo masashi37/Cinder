@@ -4,15 +4,20 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"	
 
+//‰æ‘œ
 #include "cinder/ImageIo.h"
 #include "cinder/gl/Texture.h"
 
+//‰¹
 #include "cinder/audio/Context.h"
 #include "cinder/audio/SamplePlayerNode.h"
+//‰¹—Ê
+#include "cinder/audio/NodeEffects.h"
 
 #include "cinder/Rand.h"
 #include <ctime>
 
+//ƒtƒHƒ“ƒg
 #include "cinder/Font.h"
 
 using namespace ci;

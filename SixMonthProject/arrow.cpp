@@ -41,15 +41,19 @@ void cArrow::init(){
 	audio::SourceFileRef sourceFile = audio::load(loadAsset("se/arrow_shoot.wav"));
 	audio::BufferRef buffer = sourceFile->loadBuffer();
 	shoot_se = ctx->makeNode(new audio::BufferPlayerNode(buffer));
+	gain = ctx->makeNode(new audio::GainNode(volume));
 
 	// 読み込んだオーディオを出力デバイスに関連付けておく
-	shoot_se >> ctx->getOutput();
+	shoot_se >> gain >> ctx->getOutput();
 
 	// 出力デバイスを有効にする
 	ctx->enable();
 }
 
 void cArrow::update(){
+
+	gain->setValue(volume);
+	console() << volume << std::endl;
 
 	//弓を放つ力チャージ
 	if (!is_shoot_arrow){
@@ -229,6 +233,20 @@ void cArrow::keyDown(KeyEvent event){
 	//パワーチャージ
 	if (event.getCode() == KeyEvent::KEY_SPACE){
 		is_push_space = true;
+	}
+
+	//ボリューム
+	if (volume >= 0.0f){
+		if (event.getCode() == KeyEvent::KEY_x){
+			volume += 0.1f;
+		}
+		if (volume > 1.0f)volume = 1.0f;
+	}
+	if (volume <= 1.0f){
+		if (event.getCode() == KeyEvent::KEY_z){
+			volume -= 0.1f;
+		}
+		if (volume < 0.0f)volume = 0.0f;
 	}
 
 }

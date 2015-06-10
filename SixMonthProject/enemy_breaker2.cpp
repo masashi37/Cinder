@@ -51,9 +51,10 @@ void cEnemyBreaker2::init(){
 	audio::SourceFileRef sourceFile = audio::load(loadAsset("se/arrow_hit.wav"));
 	audio::BufferRef buffer = sourceFile->loadBuffer();
 	hit_se = ctx->makeNode(new audio::BufferPlayerNode(buffer));
+	hit_gain = ctx->makeNode(new audio::GainNode(volume));
 
 	// 読み込んだオーディオを出力デバイスに関連付けておく
-	hit_se >> ctx->getOutput();
+	hit_se >> hit_gain >> ctx->getOutput();
 
 	// 出力デバイスを有効にする
 	ctx->enable();
@@ -65,11 +66,12 @@ void cEnemyBreaker2::init(){
 
 	// オーディオデータを読み込んで初期化
 	audio::SourceFileRef sourceFile1 = audio::load(loadAsset("se/explosion.wav"));
-	audio::BufferRef buffer1 = sourceFile->loadBuffer();
-	damage_se = ctx1->makeNode(new audio::BufferPlayerNode(buffer));
+	audio::BufferRef buffer1 = sourceFile1->loadBuffer();
+	damage_se = ctx1->makeNode(new audio::BufferPlayerNode(buffer1));
+	damage_gain = ctx1->makeNode(new audio::GainNode(volume));
 
 	// 読み込んだオーディオを出力デバイスに関連付けておく
-	damage_se >> ctx1->getOutput();
+	damage_se >> damage_gain >> ctx1->getOutput();
 
 	// 出力デバイスを有効にする
 	ctx1->enable();
@@ -78,7 +80,10 @@ void cEnemyBreaker2::init(){
 
 void cEnemyBreaker2::update(){
 
-	game_start_pos.y += 2.5f;
+	hit_gain->setValue(volume);
+	damage_gain->setValue(volume);
+
+	game_start_pos.y += 2.5f;	
 
 	//体力が残ってたら弓を表示
 	if (life >= 0)
@@ -88,6 +93,8 @@ void cEnemyBreaker2::update(){
 	//敵出現
 	time++;
 	if ((time % (60 * enemy_second)) == 0){
+		
+		gl::enableDepthWrite();
 
 		enemy_init.size = Vec3f(50, 50, 50);
 
@@ -135,6 +142,8 @@ void cEnemyBreaker2::update(){
 		};
 
 		enemy.push_back(enemy_init);
+
+		gl::disableDepthWrite();
 	}
 
 	//---------------------------------------------------------------------
@@ -276,6 +285,8 @@ void cEnemyBreaker2::draw(){
 	//---------------------------------------------------------------------
 	//敵
 	for (auto& enemyes : enemy){
+		gl::enableDepthRead();
+
 		//敵移動
 		enemyes.angle += angle_plus;
 		enemyes.pos += Vec3f(
@@ -287,6 +298,13 @@ void cEnemyBreaker2::draw(){
 		gl::color(0.5f, 0.5f, 0.5f);
 		gl::drawStrokedCube(enemyes.pos, enemyes.size);
 		gl::color(1, 1, 1);
+
+		gl::disableDepthRead();
+
+		if (enemyes.pos.z > -300){
+			gl::drawStringCentered(std::to_string(-(int)enemyes.pos.z),
+				Vec2f(enemyes.pos.x, enemyes.pos.y), ColorA(0.8f, 0, 0, 0.8f), font30);
+		}
 	}
 
 	//---------------------------------------------------------------------

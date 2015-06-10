@@ -23,6 +23,7 @@ class cArrow{
 	//変数---------------------------------------
 
 	audio::BufferPlayerNodeRef shoot_se;
+	audio::GainNodeRef gain;
 
 	Vec2f back_arrow_pos;
 
@@ -36,6 +37,8 @@ class cArrow{
 	float plus_speed;				//弓の速度の変化値
 	float gravity;					//重力
 	float gravity_puls;				//重力の変化値
+
+	float volume = 0.5f;
 
 	int key_direction;				//弓の動く向き
 

@@ -22,6 +22,9 @@ private:
 	audio::BufferPlayerNodeRef hit_se;
 	audio::BufferPlayerNodeRef damage_se;
 
+	audio::GainNodeRef hit_gain;
+	audio::GainNodeRef damage_gain;
+
 	//font
 	Font font50;
 	Font font30;
@@ -70,6 +73,8 @@ private:
 	Color aim_gage_color;		//Æ€ƒQ[ƒW‚ÌF
 
 public:
+
+	float volume = 0.5f;
 
 	cEnemyBreaker::cEnemyBreaker();
 

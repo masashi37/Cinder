@@ -56,9 +56,10 @@ void cEnemyBreaker::init(){
 	audio::SourceFileRef sourceFile = audio::load(loadAsset("se/arrow_hit.wav"));
 	audio::BufferRef buffer = sourceFile->loadBuffer();
 	hit_se = ctx->makeNode(new audio::BufferPlayerNode(buffer));
+	hit_gain = ctx->makeNode(new audio::GainNode(volume));
 
 	// 読み込んだオーディオを出力デバイスに関連付けておく
-	hit_se >> ctx->getOutput();
+	hit_se >> hit_gain >> ctx->getOutput();
 
 	// 出力デバイスを有効にする
 	ctx->enable();
@@ -72,9 +73,10 @@ void cEnemyBreaker::init(){
 	audio::SourceFileRef sourceFile1 = audio::load(loadAsset("se/explosion.wav"));
 	audio::BufferRef buffer1 = sourceFile1->loadBuffer();
 	damage_se = ctx1->makeNode(new audio::BufferPlayerNode(buffer1));
+	damage_gain = ctx1->makeNode(new audio::GainNode(volume));
 
 	// 読み込んだオーディオを出力デバイスに関連付けておく
-	damage_se >> ctx1->getOutput();
+	damage_se >> damage_gain >> ctx1->getOutput();
 
 	// 出力デバイスを有効にする
 	ctx1->enable();
@@ -82,6 +84,9 @@ void cEnemyBreaker::init(){
 }
 
 void cEnemyBreaker::update(){
+
+	hit_gain->setValue(volume);
+	damage_gain->setValue(volume);
 
 	//チュートリアル
 	if (!is_end_tutorial){
@@ -120,6 +125,9 @@ void cEnemyBreaker::update(){
 	//敵出現
 	if (is_end_tutorial){
 		time++;
+
+		gl::enableDepthWrite();
+
 		if ((time % (60 * enemy_second)) == 0){
 
 			enemy_init.size = Vec3f(
@@ -142,6 +150,8 @@ void cEnemyBreaker::update(){
 			};
 
 			enemy.push_back(enemy_init);
+
+			gl::disableDepthWrite();
 		}
 	}
 
@@ -220,11 +230,11 @@ void cEnemyBreaker::update(){
 			Vec2f(arrow.getSize().x, arrow.getSize().y),
 			Vec2f(enemyes.pos.x, enemyes.pos.y),
 			Vec2f(enemyes.size.x, enemyes.size.y))){
-			aim_gage_color = enemyes.color; 
+			aim_gage_color = enemyes.color;
 			arrow.setRedColor();
 			break;
 		}
-		else{ 
+		else{
 			aim_gage_color = { 1, 1, 1 };
 			arrow.setWhiteColor();
 		}
@@ -304,13 +314,25 @@ void cEnemyBreaker::draw(){
 	//---------------------------------------------------------------------
 	//敵
 	for (auto& enemyes : enemy){
+		gl::enableDepthRead();
+
 		//敵移動
 		enemyes.pos.z += enemyes.speed;
+
 		gl::color(enemyes.color);
 		gl::drawCube(enemyes.pos, enemyes.size);
+
 		gl::color(0.5f, 0.5f, 0.5f);
 		gl::drawStrokedCube(enemyes.pos, enemyes.size);
+
 		gl::color(1, 1, 1);
+
+		gl::disableDepthRead();
+
+		if (enemyes.pos.z > -300){
+			gl::drawStringCentered(std::to_string(-(int)enemyes.pos.z),
+				Vec2f(enemyes.pos.x, enemyes.pos.y), ColorA(0.8f, 0, 0, 0.8f), font30);
+		}
 	}
 
 	//---------------------------------------------------------------------
