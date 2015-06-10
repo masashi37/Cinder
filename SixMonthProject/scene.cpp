@@ -24,6 +24,9 @@ void cScene::init(){
 
 void cScene::update(){
 
+	//êØ
+	room.starUpdata();
+
 	switch (scene_mover){
 	case TITLE:
 		title.update();
@@ -74,6 +77,9 @@ void cScene::shift(){
 }
 
 void cScene::draw(){
+
+	//êØ
+	room.starDraw();
 
 	switch (scene_mover){
 	case TITLE:					title.draw();

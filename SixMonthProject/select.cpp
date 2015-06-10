@@ -7,6 +7,7 @@ cSelect::cSelect(){
 	select_pos = { 0, -HEIGHT / 2 + 50 };
 	left_select_pos = { -WIDTH / 2 + 20, 0 };
 	right_select_pos = { WIDTH / 2 - 20, 0 };
+	now_select_pos = { 0, -100 };
 
 	for (int i = 0; i < TARGET_MAX; ++i){
 		select_target[i] = {
@@ -80,6 +81,9 @@ void cSelect::draw(){
 		gl::drawCube(select_target[i].pos, select_target[i].size);
 		gl::color(1, 1, 1);
 		gl::drawStrokedCube(select_target[i].pos, select_target[i].size);
+
+		if (arrow.getPos().x < 0)now_select_pos.x = -WIDTH / 4;
+		if (arrow.getPos().x >= 0)now_select_pos.x = WIDTH / 4;
 	}
 
 	//ƒtƒHƒ“ƒg
@@ -87,6 +91,9 @@ void cSelect::draw(){
 		select_pos, Color(1, 0, 0), font);
 
 	gl::translate(0, 0, -room_depth);
+
+	gl::drawStringCentered("NOW",
+		now_select_pos, Color(1, 0, 0), font);
 
 	gl::drawString("NORMAL",
 		left_select_pos, Color(0, 1, 1), font);

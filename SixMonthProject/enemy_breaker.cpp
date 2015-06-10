@@ -18,11 +18,13 @@ cEnemyBreaker::cEnemyBreaker(){
 	score = 0;
 	score_plus = 1;
 	break_count = 0;
-	aim_gage = 50;
 	tutorial_time = 0;
 
+	aim_gage = 50.0f;
 	enemy_speed_max = 3.0f;
 	enemy_speed_min = 1.0f;
+	font_alpha = 1.0f;
+	font_alpha_plus = 0.1f;
 
 	level_up_is_move = false;
 	gameover_is_move = false;
@@ -61,6 +63,22 @@ void cEnemyBreaker::init(){
 	// 出力デバイスを有効にする
 	ctx->enable();
 
+
+
+	// 出力デバイスをゲット
+	auto ctx1 = audio::Context::master();
+
+	// オーディオデータを読み込んで初期化
+	audio::SourceFileRef sourceFile1 = audio::load(loadAsset("se/explosion.wav"));
+	audio::BufferRef buffer1 = sourceFile1->loadBuffer();
+	damage_se = ctx1->makeNode(new audio::BufferPlayerNode(buffer1));
+
+	// 読み込んだオーディオを出力デバイスに関連付けておく
+	damage_se >> ctx1->getOutput();
+
+	// 出力デバイスを有効にする
+	ctx1->enable();
+
 }
 
 void cEnemyBreaker::update(){
@@ -68,6 +86,10 @@ void cEnemyBreaker::update(){
 	//チュートリアル
 	if (!is_end_tutorial){
 		tutorial_time++;
+
+		font_alpha += font_alpha_plus;
+		if (font_alpha > 1 || font_alpha < 0)
+			font_alpha_plus *= -1;
 
 		if (tutorial_time % 60 == 0){
 
@@ -198,13 +220,20 @@ void cEnemyBreaker::update(){
 			Vec2f(arrow.getSize().x, arrow.getSize().y),
 			Vec2f(enemyes.pos.x, enemyes.pos.y),
 			Vec2f(enemyes.size.x, enemyes.size.y))){
-			aim_gage_color = enemyes.color;
+			aim_gage_color = enemyes.color; 
+			arrow.setRedColor();
 			break;
 		}
-		else{ aim_gage_color = { 1, 1, 1 }; }
+		else{ 
+			aim_gage_color = { 1, 1, 1 };
+			arrow.setWhiteColor();
+		}
 
 		//敵がのｚが0以下になったら削除
 		if (enemyes.pos.z > 0){
+			//ダメージ演出
+			hit.explosionUpData(Vec2f(enemyes.pos.x, enemyes.pos.y));
+			damage_se->start();
 			enemy_it = enemy.erase(enemy_it);
 			life--;
 			continue;
@@ -237,6 +266,11 @@ void cEnemyBreaker::draw(){
 	//空間表示
 	gl::drawStrokedCube(room.pos, room.size);
 
+	//難易度
+	gl::drawStringCentered(
+		"NORMAL",
+		Vec2f(0, -HEIGHT / 2), Color(1, 1, 1), font30);
+
 	//--------------------------------------------------------------------
 	//チュートリアル
 
@@ -244,7 +278,7 @@ void cEnemyBreaker::draw(){
 
 		gl::drawStringCentered(
 			"End tutorial : [Enter]",
-			Vec2f(0, HEIGHT / 2 - 70), Color(0, 0, 1), font30);
+			Vec2f(0, HEIGHT / 2 - 70), ColorA(0, 1, 1, font_alpha), font30);
 
 		if (tutorial_time > 60 * 3){
 			gl::drawStringCentered(
@@ -295,6 +329,9 @@ void cEnemyBreaker::draw(){
 	for (int i = 0; i < life + 1; ++i){
 		gl::drawStrokedCircle(Vec2f(-WIDTH / 2.0f, -HEIGHT / 2.0f), 10.0f * i);
 	}
+
+	//ダメージ演出
+	hit.explosionDraw();
 
 	//---------------------------------------------------------------------
 	//照準ゲージ
@@ -373,9 +410,11 @@ void cEnemyBreaker::reStartInit(){
 	score_plus = 1;
 	break_count = 0;
 
-	aim_gage = 100;
+	aim_gage = 100.0f;
 	enemy_speed_max = 3.0f;
 	enemy_speed_min = 1.0f;
+	font_alpha = 1.0f;
+	font_alpha_plus = 0.1f;
 
 	level_up_is_move = false;
 	gameover_is_move = false;

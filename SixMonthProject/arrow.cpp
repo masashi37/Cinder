@@ -8,6 +8,8 @@ cArrow::cArrow(){
 	aim_light_begin = { Vec3f(pos.xy(), pos.z - size.z / 2) };
 	aim_light_end = { Vec3f(pos.xy(), -room_depth) };
 
+	aim_line_color = { Color(1, 1, 1) };
+
 	arrow_speed = 0;
 	plus_speed = 0.5f;
 	gravity = 0.0f;
@@ -152,11 +154,13 @@ void cArrow::draw(){
 	gl::disable(GL_TEXTURE_2D);
 
 	//ñÓÇå©Ç‚Ç∑Ç≠
+	gl::color(aim_line_color);
 	gl::drawStrokedCircle(pos.xy(), 20);
 
 	//ñÓÇÃè∆èÄ
 	if (!is_shoot_arrow)
 		gl::drawLine(aim_light_begin, aim_light_end);
+	gl::color(1, 1, 1);
 
 	//É`ÉÉÅ[ÉWíÜ
 	if (is_push_space){
@@ -174,17 +178,28 @@ void cArrow::draw(){
 
 void cArrow::setInit(){
 	pos = Vec3f::zero();
+	
+	aim_line_color = { Color(1, 1, 1) };
 
 	aim_light_begin.x = 0;
 	aim_light_begin.y = 0;
 	aim_light_end.x = 0;
 	aim_light_end.y = 0;
-	
+
 	gravity = 0;
 	arrow_speed = 0;
-	
+
 	is_shoot_arrow = false;
 }
+
+void cArrow::setRedColor(){
+	aim_line_color = { Color(1, 0, 0) };
+}
+
+void cArrow::setWhiteColor(){
+	aim_line_color = { Color(1, 1, 1) };
+}
+
 
 Vec3f cArrow::getPos(){
 	return pos;

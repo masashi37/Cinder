@@ -50,15 +50,83 @@ enum SceneName{
 //表示空間
 const float room_depth = 1000;		//部屋のサイズｚ(奥行)
 class cRoom{
+private:
+	enum { STAR_MAX = 150 };
+
+	struct Star{
+		Vec3f star_pos;
+		Color star_color;
+		float angle = 0;
+		float angle_plus = 0.1f;
+		float star_move_speed = 10.0f;
+		const float star_size = 3.0f;
+	};
+	Star star[STAR_MAX];
+
+	int star_change_time = 0;
+
+
 public:
 	Vec3f pos = { 0, 0, -room_depth / 2 };			//空間ポジション
 	Vec3f size = { WIDTH, HEIGHT, room_depth };		//空間サイズ
+
+	void starUpdata(){
+		star_change_time++;
+
+		for (auto& stars : star){
+
+			//位置と色の変更
+			if (star_change_time % 60 * 2 == 0){
+				stars.star_pos = {
+					Rand::randFloat(-WIDTH / 2 * 3, WIDTH / 2 * 3),
+					Rand::randFloat(-HEIGHT / 2 * 3, HEIGHT / 2 * 3),
+					Rand::randFloat(0, -room_depth)
+				};
+				stars.star_color = { Color(
+					Rand::randFloat(0, 1),
+					Rand::randFloat(0, 1),
+					Rand::randFloat(0, 1))
+				};
+			}
+
+			//移動
+			stars.star_pos.z += stars.star_move_speed;
+			if (stars.star_pos.z > -room_depth / 2)
+				stars.star_pos.z = -room_depth;
+
+			//回転
+			stars.angle += stars.angle_plus;
+		}
+
+	}
+
+	void starDraw(){
+		for (auto& stars : star){
+			//描画
+			gl::rotate(Vec3f(0, 0, stars.angle));
+			gl::color(stars.star_color);
+
+			gl::drawSphere(stars.star_pos, stars.star_size);
+
+			gl::color(1, 1, 1);
+			gl::rotate(Vec3f(0, 0, -stars.angle));
+		}
+	}
+
 };
 
 //当たり判定
 class cCollision{
-
+private:
+	Vec2f explosion_pos;
+	float explosion_size;
+	bool is_damage;
 public:
+	cCollision::cCollision(){
+		explosion_size = 0;
+		is_damage = false;
+	}
+
 	//Cube & Arrow
 	bool arrow_is_hit_cube(
 		Vec3f arrow_pos, Vec3f arrow_size,
@@ -93,6 +161,35 @@ public:
 
 		return is_hit;
 	}
+
+	//Cube Erase
+	void explosionUpData(Vec2f cube_pos){
+		if (!is_damage){
+			explosion_pos = Vec2f(cube_pos.x, cube_pos.y);
+			is_damage = true;
+		}
+	}
+	void explosionDraw(){
+
+		if (is_damage){
+
+			if (explosion_size < 50.0f){
+
+				explosion_size++;
+
+				gl::color(0.8f, 0, 0);
+				gl::drawSolidCircle(
+					explosion_pos, explosion_size);
+				gl::color(1, 1, 1);
+
+			}
+			else if (explosion_size >= 50.0f){
+				is_damage = false;
+				explosion_size = 0;
+			}
+		}
+	}
+
 };
 
 //パーティクル

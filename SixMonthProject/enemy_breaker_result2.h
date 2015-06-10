@@ -23,6 +23,9 @@ private:
 	Vec2f score_pos;			//スコア
 	Vec2f enemy_break_pos;		//撃破数
 
+	float font_alpha;			//fontのα値
+	float font_alpha_plus;		//fontのα値の加算値
+
 	int time;					//プレイ時間
 	int score;					//スコア
 	int break_count;			//撃破数

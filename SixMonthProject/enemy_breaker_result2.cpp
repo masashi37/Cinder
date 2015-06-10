@@ -12,6 +12,9 @@ cEnemyBreakerResult2::cEnemyBreakerResult2(){
 	score_pos = { WIDTH, -25 };
 	enemy_break_pos = { -WIDTH - 300, 75 };
 
+	font_alpha = 1.0f;
+	font_alpha_plus = 0.1f;
+
 	time = 0;
 	score = 0;
 	break_count = 0;
@@ -39,6 +42,10 @@ void cEnemyBreakerResult2::update(){
 	//アニメーション
 	if (result_pos.y > -220)
 		result_pos.y -= 5.0f;
+
+	font_alpha += font_alpha_plus;
+	if (font_alpha > 1 || font_alpha < 0)
+		font_alpha_plus *= -1;
 
 	if (result_pos.y < play_time_pos.y){
 		if (play_time_pos.x < -WIDTH / 2 + 50)
@@ -103,13 +110,13 @@ void cEnemyBreakerResult2::draw(){
 	//result
 	gl::drawStringCentered(
 		("R E S U L T"),
-		result_pos, Color(0, 0, 1), font50
+		result_pos, Color(0, 1, 1), font50
 		);
 	if (is_ready_count_anime){
 		//push [Enter]
 		gl::drawStringCentered(
 			("push [Enter]"),
-			push_enter_pos, Color(0, 0, 1), font50
+			push_enter_pos, ColorA(0, 1, 1, font_alpha), font50
 			);
 	}
 
@@ -142,6 +149,9 @@ void cEnemyBreakerResult2::reStartInit(){
 	play_time_pos = { -WIDTH - 300, -125 };
 	score_pos = { WIDTH, -25 };
 	enemy_break_pos = { -WIDTH - 300, 75 };
+
+	font_alpha = 1.0f;
+	font_alpha_plus = 0.1f;
 
 	time = 0;
 	score = 0;

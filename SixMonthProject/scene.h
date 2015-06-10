@@ -17,6 +17,8 @@ private:
 
 	//ƒNƒ‰ƒX‚ðŽg‚¦‚é‚æ‚¤‚É------------------------------
 
+	cRoom room;
+
 	cTitle title;
 	cSelect select;
 

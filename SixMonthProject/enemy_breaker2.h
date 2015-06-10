@@ -20,6 +20,7 @@ private:
 
 	//sound
 	audio::BufferPlayerNodeRef hit_se;
+	audio::BufferPlayerNodeRef damage_se;
 
 	//font
 	Font font50;
@@ -60,6 +61,8 @@ private:
 	float enemy_speed_min;		//敵速度の最小値
 	float wave_spped;			//敵の速度
 	float angle_plus;			//敵の移動変化速度
+	float font_alpha;			//fontのα値
+	float font_alpha_plus;		//fontのα値の加算値
 
 	bool level_up_is_move;		//level_upのアニメーションができるか？
 	bool gameover_is_move;		//gameoverのアニメーションができるか？

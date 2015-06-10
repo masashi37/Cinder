@@ -58,6 +58,22 @@ void cEnemyBreaker2::init(){
 	// 出力デバイスを有効にする
 	ctx->enable();
 
+
+
+	// 出力デバイスをゲット
+	auto ctx1 = audio::Context::master();
+
+	// オーディオデータを読み込んで初期化
+	audio::SourceFileRef sourceFile1 = audio::load(loadAsset("se/explosion.wav"));
+	audio::BufferRef buffer1 = sourceFile->loadBuffer();
+	damage_se = ctx1->makeNode(new audio::BufferPlayerNode(buffer));
+
+	// 読み込んだオーディオを出力デバイスに関連付けておく
+	damage_se >> ctx1->getOutput();
+
+	// 出力デバイスを有効にする
+	ctx1->enable();
+
 }
 
 void cEnemyBreaker2::update(){
@@ -200,12 +216,18 @@ void cEnemyBreaker2::update(){
 			Vec2f(enemyes.pos.x, enemyes.pos.y),
 			Vec2f(enemyes.size.x, enemyes.size.y))){
 			aim_gage_color = enemyes.color;
+			arrow.setRedColor();
 			break;
 		}
-		else{ aim_gage_color = { 1, 1, 1 }; }
+		else{ 
+			aim_gage_color = { 1, 1, 1 };
+			arrow.setWhiteColor();
+		}
 
 		//敵がのｚが0以下になったら削除
 		if (enemyes.pos.z > 0){
+			hit.explosionUpData(Vec2f(enemyes.pos.x, enemyes.pos.y));
+			damage_se->start();
 			enemy_it = enemy.erase(enemy_it);
 			life--;
 			continue;
@@ -238,6 +260,12 @@ void cEnemyBreaker2::draw(){
 	//空間表示
 	gl::drawStrokedCube(room.pos, room.size);
 
+	//難易度
+	gl::drawStringCentered(
+		"H A R D",
+		Vec2f(0, -HEIGHT / 2), Color(1, 1, 1), font30);
+
+	//ゲームスタートの合図
 	if (game_start_pos.y > -WIDTH / 2 - 50 &&
 		game_start_pos.y < WIDTH / 2 + 50){
 		gl::drawStringCentered(
@@ -278,11 +306,14 @@ void cEnemyBreaker2::draw(){
 		gl::drawStrokedCircle(Vec2f(-WIDTH / 2.0f, -HEIGHT / 2.0f), 10.0f * i);
 	}
 
+	//ダメージ演出
+	hit.explosionDraw();
+
 	//---------------------------------------------------------------------
 	//照準ゲージ
 	gl::color(aim_gage_color);
 
-	gl::drawSolidCircle(Vec2f(WIDTH / 2.0f, HEIGHT / 2.0f), (float)aim_gage);
+	gl::drawSolidCircle(Vec2f(WIDTH / 2.0f, HEIGHT / 2.0f), aim_gage);
 	gl::drawStringRight(
 		"A I M",
 		Vec2f(WIDTH / 2 - aim_gage, HEIGHT / 2 - 30),
@@ -356,8 +387,8 @@ void cEnemyBreaker2::reStartInit(){
 	break_count = 0;
 	aim_gage = 100;
 
-	enemy_speed_max = 3.0f;
-	enemy_speed_min = 1.0f;
+	enemy_speed_max = 1.0f;
+	enemy_speed_min = 0.5f;
 
 	level_up_is_move = false;
 	gameover_is_move = false;

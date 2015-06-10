@@ -23,6 +23,7 @@ class cSelect{
 	Vec2f select_pos;			//セレクト
 	Vec2f left_select_pos;		//選択肢(左)
 	Vec2f right_select_pos;		//選択肢(右)
+	Vec2f now_select_pos;		//現在の選択肢
 
 	enum {
 		TARGET_MAX = 2,			//ターゲットの最大数

@@ -30,6 +30,8 @@ class cArrow{
 	Vec3f aim_light_begin;			//ライトの開始
 	Vec3f aim_light_end;			//ライトの終了
 
+	Color aim_line_color;			//照準ゲージの色
+
 	float arrow_speed;				//弓の速度
 	float plus_speed;				//弓の速度の変化値
 	float gravity;					//重力
@@ -56,6 +58,8 @@ public:
 	void draw();
 
 	void setInit();				//弓のポジション初期化
+	void setRedColor();			//弓の照準色変更
+	void setWhiteColor();		//弓の照準色変更
 	Vec3f getPos();				//弓のポジション取得
 	Vec3f getSize();			//弓のサイズ取得
 	bool get_is_shooting();		//弓を放ったかどうかの取得
