@@ -75,6 +75,10 @@ void cSelect::draw(){
 	//‹óŠÔ•\Ž¦
 	gl::drawStrokedCube(room.pos, room.size);
 
+	gl::color(0, 0, 0);
+	gl::drawCube(Vec3f(0, HEIGHT / 2 + 1, -500), Vec3f(WIDTH, -1, 1000));
+	gl::color(1, 1, 1);
+
 	//‘I‘ðŽˆ
 	for (int i = 0; i < TARGET_MAX; ++i){
 		gl::color(0.5f, 0.5f, 0.5f);

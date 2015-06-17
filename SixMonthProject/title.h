@@ -18,6 +18,7 @@ class cTitle{
 
 	//font
 	Font font;
+	Font font_;
 
 	//•Ï”---------------------------------------
 

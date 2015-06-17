@@ -276,6 +276,10 @@ void cEnemyBreaker::draw(){
 	//空間表示
 	gl::drawStrokedCube(room.pos, room.size);
 
+	gl::color(0, 0, 0);
+	gl::drawCube(Vec3f(0, HEIGHT / 2 + 1, -500), Vec3f(WIDTH, -1, 1000));
+	gl::color(1, 1, 1);
+
 	//難易度
 	gl::drawStringCentered(
 		"NORMAL",
@@ -466,8 +470,9 @@ void cEnemyBreaker::keyDown(KeyEvent event){
 			enemy.clear();
 		}
 
+	//デバッグキー
 	if (event.getCode() == KeyEvent::KEY_l)
-		life = -1;
+		life = -3;
 
 }
 

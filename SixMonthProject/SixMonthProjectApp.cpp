@@ -50,14 +50,6 @@ public:
 		// 出力デバイスをゲット
 		auto ctx = audio::Context::master();
 
-		//BGMカタログ
-		/*
-		("bgm/city_walk.wav")
-		("bgm/film_clash.wav")
-		("bgm/fire_dance.wav")
-		("bgm/zombie_rock.wav")
-		*/
-
 		// オーディオデータを読み込んで初期化
 		audio::SourceFileRef sourceFile = audio::load(loadAsset("bgm/zombie_rock.wav"));
 		audio::BufferRef buffer = sourceFile->loadBuffer();
@@ -97,7 +89,7 @@ public:
 
 	void draw(){
 		//背景色
-		gl::clear(Color(0, 0, 0));
+		gl::clear(Color(0.1f, 0.1f, 0.1f));
 		//画像の透明化
 		gl::enableAlphaBlending();
 

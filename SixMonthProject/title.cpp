@@ -29,6 +29,7 @@ void cTitle::init(){
 
 	//font
 	font = Font(loadAsset("font/HoboStd.otf"), 30);
+	font_ = Font(loadAsset("font/HoboStd.otf"), 30.5f);
 
 	arrow.init();
 
@@ -95,7 +96,12 @@ int cTitle::shift(int mover){
 void cTitle::draw(){
 
 	//ãÛä‘ï\é¶
+
 	gl::drawStrokedCube(room.pos, room.size);
+
+	gl::color(0, 0, 0);
+	gl::drawCube(Vec3f(0, HEIGHT / 2 + 1, -500), Vec3f(WIDTH*1.5f, -1, 1000));
+	gl::color(1, 1, 1, 1);
 
 	//ÉçÉS
 	gl::draw(logo_pic.pic, logo_pic.pos);
@@ -131,7 +137,17 @@ void cTitle::draw(){
 	}
 
 	//---------------------------------------------------
-	//font
+	//font	
+	gl::drawStringCentered(
+		"<Arrow operate>",
+		Vec2f(0, 70), Color(1, 1, 0), font_);
+	gl::drawStringCentered(
+		"Move : Press [CROSS KEY]",
+		Vec2f(0, 100), Color(1, 1, 0), font_);
+	gl::drawStringCentered(
+		"Shooting : Press [SPACE KEY]",
+		Vec2f(0, 130), Color(1, 1, 0), font_);
+
 	gl::drawStringCentered(
 		"<Arrow operate>",
 		Vec2f(0, 70), Color(1, 0, 0), font);

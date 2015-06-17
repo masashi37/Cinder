@@ -166,15 +166,17 @@ void cArrow::draw(){
 	gl::color(1, 1, 1);
 
 	//チャージ中
-	if (is_push_space){
-		//チャージゲージ
-		gl::drawCube(
-			pos + Vec3f((pos.x >= 0) ? -(float)GAGE_SPACE : (float)GAGE_SPACE, 0, 0),
-			Vec3f(10, arrow_speed * 2, 10));
-		//チャージゲージの枠
-		gl::drawStrokedCube(
-			pos + Vec3f((pos.x >= 0) ? -(float)GAGE_SPACE : (float)GAGE_SPACE, 0, 0),
-			Vec3f(10, SPEED_MAX * 2, 10));
+	if (!is_shoot_arrow){
+		if (is_push_space){
+			//チャージゲージ
+			gl::drawCube(
+				pos + Vec3f((pos.x >= 0) ? -(float)GAGE_SPACE : (float)GAGE_SPACE, 0, 0),
+				Vec3f(10, arrow_speed * 2, 10));
+			//チャージゲージの枠
+			gl::drawStrokedCube(
+				pos + Vec3f((pos.x >= 0) ? -(float)GAGE_SPACE : (float)GAGE_SPACE, 0, 0),
+				Vec3f(10, SPEED_MAX * 2, 10));
+		}
 	}
 }
 
@@ -264,9 +266,10 @@ void cArrow::keyUp(KeyEvent event){
 
 	//パワーチャージ終了
 	if (event.getCode() == KeyEvent::KEY_SPACE){
-		shoot_se->start();		//SE
-
-		back_arrow_pos = Vec2f(pos.x, pos.y);
+		if (!is_shoot_arrow){
+			shoot_se->start();		//SE
+			back_arrow_pos = Vec2f(pos.x, pos.y);
+		}
 
 		is_push_space = false;
 		is_shoot_arrow = true;

@@ -38,7 +38,7 @@ class cArrow{
 	float gravity;					//d—Í
 	float gravity_puls;				//d—Í‚Ì•Ï‰»’l
 
-	float volume = 0.5f;
+	float volume;
 
 	int key_direction;				//‹|‚Ì“®‚­Œü‚«
 

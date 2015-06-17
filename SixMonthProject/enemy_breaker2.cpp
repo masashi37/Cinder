@@ -269,6 +269,10 @@ void cEnemyBreaker2::draw(){
 	//空間表示
 	gl::drawStrokedCube(room.pos, room.size);
 
+	gl::color(0, 0, 0);
+	gl::drawCube(Vec3f(0, HEIGHT / 2 + 1, -500), Vec3f(WIDTH, -1, 1000));
+	gl::color(1, 1, 1);
+
 	//難易度
 	gl::drawStringCentered(
 		"H A R D",
@@ -428,6 +432,13 @@ void cEnemyBreaker2::keyDown(KeyEvent event){
 	if (life >= 0)
 		arrow.keyDown(event);
 
+	//デバッグキー
+	if (event.getCode() == KeyEvent::KEY_l)
+		life = -3;
+	if (event.getCode() == KeyEvent::KEY_e){
+		enemy_it = enemy.begin();
+		(*enemy_it).speed.z += 5.0f;
+	}
 }
 
 void cEnemyBreaker2::keyUp(KeyEvent event){

@@ -62,8 +62,8 @@ private:
 		Vec3f star_pos;
 		Color star_color;
 		float angle = 0;
-		float angle_plus = 0.1f;
-		float star_move_speed = 10.0f;
+		float star_move_speed = 50.0f;
+		const float angle_plus = 0.1f;
 		const float star_size = 3.0f;
 	};
 	Star star[STAR_MAX];
@@ -73,10 +73,10 @@ private:
 
 public:
 	Vec3f pos = { 0, 0, -room_depth / 2 };			//空間ポジション
-	Vec3f size = { WIDTH, HEIGHT, room_depth };		//空間サイズ
+	Vec3f size = { WIDTH*1.5f, HEIGHT, room_depth };		//空間サイズ
 
 	void starUpdata(){
-		star_change_time++;
+		star_change_time++;	
 
 		for (auto& stars : star){
 
@@ -111,7 +111,9 @@ public:
 			gl::rotate(Vec3f(0, 0, stars.angle));
 			gl::color(stars.star_color);
 
-			gl::drawSphere(stars.star_pos, stars.star_size);
+			//gl::drawSphere(stars.star_pos, stars.star_size);
+			gl::drawLine(stars.star_pos,
+				Vec3f(stars.star_pos.x, stars.star_pos.y, stars.star_pos.z - 100));
 
 			gl::color(1, 1, 1);
 			gl::rotate(Vec3f(0, 0, -stars.angle));
