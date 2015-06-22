@@ -204,10 +204,14 @@ class cParticle{
 private:
 	enum{ PARTICLE_MAX = 50 };		//パーティクルの最大数
 
-	Vec3f pos[PARTICLE_MAX];		//パーティクルポジション
-	Vec3f size[PARTICLE_MAX];		//パーティクルサイズ
-	Vec3f speed[PARTICLE_MAX];		//パーティクル速度
-	ColorA color[PARTICLE_MAX];		//パーティクル色
+	struct ParticleStatus{
+		Vec3f pos;			//パーティクルポジション
+		Vec3f size;			//パーティクルサイズ
+		Vec3f speed;		//パーティクル速度
+		ColorA color;		//パーティクル色
+	};
+	std::vector<ParticleStatus>particle;
+	ParticleStatus particle_init;
 
 	int clear_time;					//パーティクルを消す時間制御
 
@@ -221,11 +225,15 @@ public:
 
 		is_ready = false;
 
+		particle_init = {
+			Vec3f::zero(),
+			Vec3f::zero(),
+			Vec3f::zero(),
+			{ 0, 0, 0, 1 } 
+		};
+
 		for (int i = 0; i < PARTICLE_MAX; ++i){
-			pos[i] = Vec3f::zero();
-			size[i] = Vec3f::zero();
-			speed[i] = Vec3f::zero();
-			color[i] = { 0, 0, 0, 1 };
+			particle.push_back(particle_init);
 		}
 
 	}
@@ -235,14 +243,14 @@ public:
 
 		if (!is_ready){
 			for (int i = 0; i < PARTICLE_MAX; ++i){
-				pos[i] = particle_pos;
-				size[i] = { 10, 10, 10 };
-				speed[i] = {
+				particle[i].pos = particle_pos;
+				particle[i].size = { 10, 10, 10 };
+				particle[i].speed = {
 					Rand::randFloat(-5, 5),
 					Rand::randFloat(-5, 5),
 					Rand::randFloat(-5, 5)
 				};
-				color[i] = {
+				particle[i].color = {
 					Rand::randFloat(0, 1),
 					Rand::randFloat(0, 1),
 					Rand::randFloat(0, 1),
@@ -259,19 +267,20 @@ public:
 		if (is_ready){
 			if (clear_time <= 60){
 				for (int i = 0; i < PARTICLE_MAX; ++i){
-					gl::color(color[i]);
-					gl::drawCube(pos[i], size[i]);
+					gl::color(particle[i].color);
+					gl::drawCube(particle[i].pos, particle[i].size);
 					gl::color(1, 1, 1);
 
-					pos[i] += speed[i];
-					if (color[i].a >= 0)
-						color[i].a -= 0.02f;
+					particle[i].pos += particle[i].speed;
+					if (particle[i].color.a >= 0)
+						particle[i].color.a -= 0.02f;
 				}
 
 				clear_time++;
 
 			}
 			else{
+				particle.clear();
 				clear_time = 0;
 				is_ready = false;
 			}
