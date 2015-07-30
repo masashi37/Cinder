@@ -32,10 +32,12 @@ private:
 	Vec3f pos;					//弓の座標
 	Vec3f aim_light_begin;		//ライトの開始
 	Vec3f aim_light_end;		//ライトの終了
+	Vec3f arrow_speed;			//弓の速度
+
+	Vec2f mouse_pos;			//マウスのポジション
 
 	Color aim_line_color;		//照準ゲージの色
 
-	float arrow_speed;			//弓の速度
 	float acceleration;			//弓の加速度
 	float gravity;				//重力
 

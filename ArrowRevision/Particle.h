@@ -15,9 +15,9 @@ private:
 	};
 	std::vector<ParticleStatus>particle;
 
-	int clear_time;					//パーティクルを消す時間制御
+	int clear_time;			//パーティクルを消す時間制御
 
-	bool is_ready;					//パーティクルの準備ができているかどうか？
+	bool is_ready;			//パーティクルの準備ができているかどうか？
 
 public:
 

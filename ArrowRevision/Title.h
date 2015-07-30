@@ -1,25 +1,18 @@
 
 #pragma once
 
-#include "Room.hpp"
-#include "Star.hpp"
-#include "Particle.h"
+#include "SceneBase.h"
 #include "Arrow.h"
 
 
 typedef std::shared_ptr<class Title>TitleSP;
-class Title{
+class Title :public SceneBase{
 
 private:
 
-	RoomSP room = RoomSP(new Room);
-	StarSP star = StarSP(new Star(150));
 	ArrowSP arrow = ArrowSP(new Arrow);
-	ParticleSP particle = ParticleSP(new Particle);
 
 	//----------------------------------------------------
-
-	int particle_time = 0;
 
 public:
 

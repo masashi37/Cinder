@@ -2,51 +2,44 @@
 #include "Title.h"
 
 
-void Title::init(){
+void Title::init() {
 
 	arrow->init();
 
 }
 
-void Title::update(){
+void Title::update() {
 
-	star->updata();
+	SceneBase::roomUpdate();
 	arrow->update();
 
-	particle_time++;
-	if (particle_time % 60 == 0) {
-		particle->create(5, Vec3f::zero());
-	}
+}
+
+void Title::shift() {
 
 }
 
-void Title::shift(){
+void Title::draw() {
 
-}
-
-void Title::draw(){
-
-	star->draw();
-	room->draw();
+	SceneBase::roomDraw();
 	arrow->draw();
-	particle->draw();
 
 }
 
 
-void Title::mouseDown(MouseEvent event){
+void Title::mouseDown(MouseEvent event) {
 
 	arrow->mouseDown(event);
 
 }
 
-void Title::mouseMove(MouseEvent event){
+void Title::mouseMove(MouseEvent event) {
 
 	arrow->mouseMove(event);
 
 }
 
-void Title::mouseUp(MouseEvent event){
+void Title::mouseUp(MouseEvent event) {
 
 	arrow->mouseUp(event);
 
