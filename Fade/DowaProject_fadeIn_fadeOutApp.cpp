@@ -51,5 +51,7 @@ public:
 		fade.draw();
 	}
 
+
+
 };
 CINDER_APP_NATIVE(DowaProject_fadeIn_fadeOutApp, RendererGl)
