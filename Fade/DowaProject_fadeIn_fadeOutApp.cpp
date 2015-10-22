@@ -9,33 +9,31 @@ private:
 
 	Fade fade;
 
-	bool is_start_fadeout_;
-	bool is_start_fadein_;
+	bool mIsDownAKey = false;
+	bool mIsDownSKey = false;
 
 public:
 
 	void setup() {
-		is_start_fadeout_ = false;
-		is_start_fadein_ = false;
-
 		setWindowSize(700, 700);
 	}
 
 	void keyDown(KeyEvent event) {
-
 		if (event.getCode() == KeyEvent::KEY_a) {
-			is_start_fadeout_ = true;
+			mIsDownAKey = true;
+			mIsDownSKey = false;
 		}
 		if (event.getCode() == KeyEvent::KEY_s) {
-			is_start_fadein_ = true;
+			mIsDownAKey = false;
+			mIsDownSKey = true;
 		}
-
 	}
 
 	void update() {
-		if (is_start_fadein_) {
+		if (mIsDownAKey)
+			fade.fadeOut(VEIL_FADE);
+		if (mIsDownSKey)
 			fade.fadeIn();
-		}
 	}
 
 	void draw() {
@@ -50,9 +48,7 @@ public:
 				Vec3f(70, 70, 70));
 		}
 
-		if (is_start_fadeout_) {
-			fade.fadeOut(CUBE_FADE);
-		}
+		fade.draw();
 	}
 
 };
