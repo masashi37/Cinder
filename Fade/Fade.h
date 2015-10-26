@@ -4,6 +4,9 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 
+#include "cinder/ImageIo.h"
+#include "cinder/gl/Texture.h"
+
 #include <vector>
 
 using namespace ci;
@@ -29,23 +32,30 @@ struct PolygonDate :ObjectBase {
 
 enum FadePattern {
 	//全画面のα値変化でfade
-	CUBE_FADE,
+	FULL_SCREEN_FADE,
+
 	//画面の中心から円が出て、拡縮とα値変化でfade
-	CIRCLE_FADE,
+	CIRCLE_SCALING_FADE,
+	
 	//画面上から垂れ幕(Cube)が出てfade
 	VEIL_FADE,
-	//サイドカーテンの様に横からfade
-	//未実装
-	SIDE_CURTAIN_FADE,
+	
+	//左からカーテンの様にfade
+	FROM_LEFT_CURTAIN_FADE,
+	
+	//右からカーテンの様にfade
+	FROM_RIGHT_CURTAIN_FADE,
+
 	//センターカーテンの様に横からfade
-	//未実装
 	CENTER_CURTAIN_FADE,
-	//ピンホール型のfade
-	//未実装
+	
+	//ピンホール型のfade(改善の余地有)
 	PIN_HALL_FADE,
+	
 	//画面中に四角が多数出て画面を埋め尽くしてfade
 	//未実装
 	NOISE_FADE,
+	
 	//画面の中心から三角が出て扇形に徐々に展開してfade
 	//使用できない(未完成)
 	POLYGON_FADE,
@@ -62,6 +72,9 @@ private:
 	std::vector<PolygonDate>mHidePolygon;
 
 
+	gl::Texture mPinHallTexture;
+
+
 	bool mIsReadyFadeOut;
 	bool mIsEndFadeOut;
 
@@ -71,23 +84,54 @@ private:
 	bool mIsEndInit;
 
 
-	int mPattern;
+	FadePattern mPattern;
 
-	const int FADE_INTERVAL = (60 * 2);
+	int mFadeInterval;
 
-	const float FADE_SPEED = (1.0f / FADE_INTERVAL);
+	float mFadeSpeed;
 
 public:
 
 	Fade();
 
 
-	//「Fadeout」を使う時呼ぶ
-	void fadeOut(const int);
+	//全画面一律のFadeOut　(終了までの秒数(int))
+	void fullScreenFadeOut(const int);
+	//全画面一律のFadeOut　(終了までの秒数(int))
+	void fullScreenFadeIn(const int);
 
-	//「Fadein」を使う時呼ぶ
-	void fadeIn();
+	//センターからサークルが広がってFadeOut　(終了までの秒数(int))
+	void circleScalingFadeOut(const int);
+	//センターからサークルが広がってFadeIn　(終了までの秒数(int))
+	void circleScalingFadeIn(const int);
 
+	//垂れ幕式FadeOut　(終了までの秒数(int))
+	void veilMoveFadeOut(const int);
+	//垂れ幕式FadeIn　(終了までの秒数(int))
+	void veilMoveFadeIn(const int);
+
+	//カーテン式(進行方向←)FadeOut　(終了までの秒数(int))
+	void fromLeftCurtainFadeOut(const int);
+	//カーテン式(進行方向←)FadeIn　(終了までの秒数(int))
+	void fromLeftCurtainFadeIn(const int);
+
+	//カーテン式(進行方向→)FadeOut　(終了までの秒数(int))
+	void fromRightCurtainFadeOut(const int);
+	//カーテン式(進行方向→)FadeIn　(終了までの秒数(int))
+	void fromRightCurtainFadeIn(const int);
+
+	//中央カーテン式(進行方向)FadeOut　(終了までの秒数(int))
+	void centerCurtainFadeOut(const int);
+	//中央カーテン式(進行方向)FadeIn　(終了までの秒数(int))
+	void centerCurtainFadeIn(const int);
+
+	//ピンホールFadeOut　(終了までの秒数(int))
+	void pinHallFadeOut(const int);
+	//ピンホールFadeIn　(終了までの秒数(int))
+	void pinHallFadeIn(const int);
+
+	
+	//FadeOut/Inの描画
 	void draw();
 
 };

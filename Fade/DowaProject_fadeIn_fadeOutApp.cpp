@@ -15,7 +15,7 @@ private:
 public:
 
 	void setup() {
-		setWindowSize(700, 700);
+		setWindowSize(800, 450);
 	}
 
 	void keyDown(KeyEvent event) {
@@ -31,9 +31,22 @@ public:
 
 	void update() {
 		if (mIsDownAKey)
-			fade.fadeOut(VEIL_FADE);
+			//fade.fullScreenFadeOut(2);
+			//fade.circleScalingFadeOut(2);
+			//fade.veilMoveFadeOut(2);
+			//fade.fromLeftCurtainFadeOut(2);
+			//fade.fromRightCurtainFadeOut(2);
+			//fade.centerCurtainFadeOut(2);
+			fade.pinHallFadeOut(2);
+
 		if (mIsDownSKey)
-			fade.fadeIn();
+			//fade.fullScreenFadeIn(2);
+			//fade.circleScalingFadeIn(2);
+			//fade.veilMoveFadeIn(2);
+			//fade.fromLeftCurtainFadeIn(2);
+			//fade.fromRightCurtainFadeIn(2);
+			//fade.centerCurtainFadeIn(2);
+			fade.pinHallFadeIn(2);
 	}
 
 	void draw() {
@@ -50,8 +63,6 @@ public:
 
 		fade.draw();
 	}
-
-
 
 };
 CINDER_APP_NATIVE(DowaProject_fadeIn_fadeOutApp, RendererGl)
