@@ -659,7 +659,7 @@ void Fade::pinHallFadeOut(const int time) {
 			mPattern = PIN_HALL_FADE;
 			mFadeInterval = (60 * time);
 			mFadeSpeed = (((float)getWindowWidth() * 5) / mFadeInterval);
-			
+
 			mHideCube.emplace_back();
 
 			for (unsigned int i = 0; i < mHideCube.size(); ++i) {
@@ -669,7 +669,7 @@ void Fade::pinHallFadeOut(const int time) {
 					Vec3f(
 						(float)getWindowWidth() * 5,
 						(float)getWindowHeight() * 5,
-						0.1f);
+						0.0f);
 				mHideCube[i].mColor =
 					ColorA(0.0f, 0.0f, 0.0f, 1.0f);
 			}
@@ -727,7 +727,7 @@ void Fade::pinHallFadeIn(const int time) {
 			mHideCube[i].mSize.y += fadeSpeedY;
 
 			//α値が最小値(0.0f)になったら
-			//fadeOutを使用可能に変更
+			//fadeOutを使用可能に変更a
 			if (mHideCube[i].mSize.x >= ((float)getWindowWidth() * 5) ||
 				mHideCube[i].mSize.y >= ((float)getWindowHeight() * 5)) {
 
@@ -743,6 +743,147 @@ void Fade::pinHallFadeIn(const int time) {
 				return;
 			}
 
+		}
+
+	}
+
+}
+
+//----------------------------------
+//TODO:ノイズフェードの計算を完成させる
+//forをxとyでやる方が簡単？
+//----------------------------------
+
+void Fade::noiseFadeOut(
+	const int time, const int length, const int wide) {
+
+	//この関数が呼ばれた時fadeOutが終了しているなら動かせない
+	//終了していないならfadeOutを動かす準備が完了
+	if (mIsEndFadeOut)return;
+	mIsReadyFadeOut = true;
+
+	const Vec2f cubeSize = Vec2f(
+		((float)getWindowWidth() / wide),
+		((float)getWindowHeight() / length));
+
+	const int cubeMax = wide * length;
+
+	int timer = 0;
+
+	if (mIsReadyFadeOut) {
+
+		//生成・初期化
+		if (!mIsEndInit) {
+
+			mPattern = NOISE_FADE;
+			mFadeInterval = (60 * time);
+			mFadeSpeed =
+				((float)cubeMax / mFadeInterval);
+			mNoiseCubeLength = length;
+			mNoiseCubeWide = wide;
+
+			for (int y = 0; y < mNoiseCubeLength; ++y) {
+				for (int x = 0; x < mNoiseCubeWide; ++x) {
+					mHideCube.emplace_back();
+				}
+			}
+
+			int cubeNumber;
+			for (int y = 0; y < mNoiseCubeLength; ++y) {
+				for (int x = 0; x < mNoiseCubeWide; ++x) {
+
+					cubeNumber = x + (mNoiseCubeWide * y);
+					console() << cubeNumber << std::endl;
+
+					mHideCube[cubeNumber].mPos = Vec3f(
+						-((float)getWindowWidth() / 2) +
+						(cubeSize.x / 2) + (cubeSize.x * (x % y)),
+						-((float)getWindowHeight() / 2) +
+						(cubeSize.y / 2) + (cubeSize.y * y),
+						0.0f);
+
+					mHideCube[cubeNumber].mSize =
+						Vec3f(
+							cubeSize.x,
+							cubeSize.y,
+							0.1f);
+
+					mHideCube[cubeNumber].mColor =
+						ColorA(0.0f, 0.0f, 0.0f, 1.0f);
+				}
+			}
+
+			//一度だけしか処理しないように
+			mIsEndInit = true;
+		}
+
+		//初期化が終了後、更新開始
+		if (mIsEndInit) {
+
+			//α値計算
+			timer++;
+
+			for (int i = 0; i < cubeMax;) {
+				mHideCube[i].mColor.a = 1.0f;
+			}
+
+			//α値が最大値(1.0f)になったら
+			//fadeInを使用可能に変更
+			if (mHideCube[cubeMax].mColor.a == 1.0f) {
+				mIsEndFadeOut = true;
+				mIsEndFadeIn = false;
+				return;
+			}
+
+		}
+
+	}
+
+}
+void Fade::noiseFadeIn(const int time) {
+
+	//この関数が呼ばれた時fadeInが終了しているなら動かせない
+	//同じくFadeoutが終了してないと使えない
+	//両方の条件が成立しているならfadeInを動かす準備が完了
+	if (mIsEndFadeIn)return;
+	if (!mIsEndFadeOut)return;
+	mIsReadyFadeIn = true;
+
+	const int cubeMax = mNoiseCubeWide * mNoiseCubeLength;
+
+	int timer = 0;
+	int y = 0;
+
+	mFadeInterval = (60 * time);
+	mFadeSpeed =
+		((float)cubeMax / mFadeInterval);
+
+	if (mIsReadyFadeIn) {
+
+		//α値計算
+		timer++;
+
+		for (int i = (cubeMax + 1); i > -1;) {
+			if ((timer / mFadeInterval) == 0)--i;
+
+			if (i <= (int)mHideCube.size())
+				mHideCube[i].mColor.a = 0.0f;
+		}
+
+		//α値が最小値(0.0f)になったら
+		//fadeOutを使用可能に変更
+		if (mHideCube[0].mColor.a == 0.0f) {
+
+			mHideCube.clear();
+
+			mIsReadyFadeOut =
+				mIsEndFadeIn = true;
+
+			mIsReadyFadeIn =
+				mIsEndInit =
+				mIsEndFadeOut = false;
+
+			return;
 		}
 
 	}
@@ -944,6 +1085,34 @@ void Fade::draw() {
 			mPinHallTexture.unbind();
 			gl::disable(GL_TEXTURE_2D);
 
+			gl::color(1.0f, 1.0f, 1.0f, 1.0f);
+
+			gl::disableAlphaBlending();
+
+			gl::popModelView();
+
+		}
+
+		break;
+#pragma endregion
+
+#pragma region case NOISE_FADE:
+	case NOISE_FADE:
+
+		for (unsigned int i = 0; i < mHideCube.size(); ++i) {
+
+			//透明度追加・表示位置を中心に移動・色を変更
+			gl::pushModelView();
+			gl::translate(getWindowCenter());
+
+			gl::enableAlphaBlending();
+
+			gl::color(mHideCube[i].mColor);
+
+			//描画
+			gl::drawCube(mHideCube[i].mPos, mHideCube[i].mSize);
+
+			//全て元に戻す
 			gl::color(1.0f, 1.0f, 1.0f, 1.0f);
 
 			gl::disableAlphaBlending();

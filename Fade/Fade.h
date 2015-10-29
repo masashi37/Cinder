@@ -53,7 +53,7 @@ enum FadePattern {
 	PIN_HALL_FADE,
 	
 	//画面中に四角が多数出て画面を埋め尽くしてfade
-	//未実装
+	//使用できない(未完成)
 	NOISE_FADE,
 	
 	//画面の中心から三角が出て扇形に徐々に展開してfade
@@ -90,6 +90,9 @@ private:
 
 	float mFadeSpeed;
 
+	int mNoiseCubeLength;
+	int mNoiseCubeWide;
+
 public:
 
 	Fade();
@@ -125,10 +128,19 @@ public:
 	//中央カーテン式(進行方向)FadeIn　(終了までの秒数(int))
 	void centerCurtainFadeIn(const int);
 
+	//ピンホールFadeOut　(終了までの秒数(int),)
+	void pinHallFadeOut(const int,const bool);
 	//ピンホールFadeOut　(終了までの秒数(int))
 	void pinHallFadeOut(const int);
 	//ピンホールFadeIn　(終了までの秒数(int))
 	void pinHallFadeIn(const int);
+
+	//ノイズ(Cube)大量表示でFadeOut
+	//(インターバル(int),縦のマス数(int),横のマス数(int))
+	void noiseFadeOut(const int,const int,const int);
+	//ノイズ(Cube)大量表示でFadeIn
+	//(インターバル(int),縦のマス数(int),横のマス数(int))
+	void noiseFadeIn(const int);
 
 	
 	//FadeOut/Inの描画
