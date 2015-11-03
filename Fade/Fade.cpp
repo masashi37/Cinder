@@ -638,7 +638,7 @@ void Fade::centerCurtainFadeIn(const int time) {
 
 }
 
-void Fade::pinHallFadeOut(const int time) {
+void Fade::pinHallFadeOut(const int time, const bool canClose) {
 
 	//この関数が呼ばれた時fadeOutが終了しているなら動かせない
 	//終了していないならfadeOutを動かす準備が完了
@@ -647,6 +647,10 @@ void Fade::pinHallFadeOut(const int time) {
 
 	const float fadeSpeedY
 		= (((float)getWindowHeight() * 5) / mFadeInterval);
+	const float quarterWindowWidth
+		= ((float)getWindowWidth() / 4);
+	const float quarterWindowHeight
+		= ((float)getWindowHeight() / 4);
 
 	if (mIsReadyFadeOut) {
 
@@ -660,16 +664,56 @@ void Fade::pinHallFadeOut(const int time) {
 			mFadeInterval = (60 * time);
 			mFadeSpeed = (((float)getWindowWidth() * 5) / mFadeInterval);
 
-			mHideCube.emplace_back();
+			mCanMoveHideBox = false;
 
-			for (unsigned int i = 0; i < mHideCube.size(); ++i) {
-				mHideCube[i].mPos =
-					Vec3f::zero();
-				mHideCube[i].mSize =
-					Vec3f(
-						(float)getWindowWidth() * 5,
-						(float)getWindowHeight() * 5,
-						0.0f);
+			for (int i = 0; i < 5; ++i) {
+				mHideCube.emplace_back();
+			}
+
+			//PosInit--------------------------
+			mHideCube[0].mPos =
+				Vec3f::zero();
+			mHideCube[1].mPos = Vec3f(
+				-(quarterWindowWidth * 3),
+				0.0f,
+				0.0f);
+			mHideCube[2].mPos = Vec3f(
+				(quarterWindowWidth * 3),
+				0.0f,
+				0.0f);
+			mHideCube[3].mPos = Vec3f(
+				0.0f,
+				-(quarterWindowHeight * 3),
+				0.0f);
+			mHideCube[4].mPos = Vec3f(
+				0.0f,
+				(quarterWindowHeight * 3),
+				0.0f);
+
+			//SizeInit------------------------------
+			mHideCube[0].mSize = Vec3f(
+				(float)getWindowWidth() * 5,
+				(float)getWindowHeight() * 5,
+				0.0f);
+			mHideCube[1].mSize = Vec3f(
+				(float)getWindowWidth() / 2,
+				(float)getWindowHeight(),
+				0.0f);
+			mHideCube[2].mSize = Vec3f(
+				(float)getWindowWidth() / 2,
+				(float)getWindowHeight(),
+				0.0f);
+			mHideCube[3].mSize = Vec3f(
+				(float)getWindowWidth(),
+				(float)getWindowHeight() / 2,
+				0.0f);
+			mHideCube[4].mSize = Vec3f(
+				(float)getWindowWidth(),
+				(float)getWindowHeight() / 2,
+				0.0f);
+
+			//ColorInit---------------------------------
+			for (int i = 0; i < 5; ++i) {
 				mHideCube[i].mColor =
 					ColorA(0.0f, 0.0f, 0.0f, 1.0f);
 			}
@@ -681,28 +725,46 @@ void Fade::pinHallFadeOut(const int time) {
 		//初期化が終了後、更新開始
 		if (mIsEndInit) {
 
-			for (unsigned int i = 0; i < mHideCube.size(); ++i) {
-				mHideCube[i].mSize.x -= mFadeSpeed;
-				mHideCube[i].mSize.y -= fadeSpeedY;
+			if (mCanMoveHideBox) {
+				mHideCube[0].mSize.x -= mFadeSpeed;
+				mHideCube[0].mSize.y -= fadeSpeedY;
 
-				//α値が最大値(1.0f)になったら
-				//fadeInを使用可能に変更
-				if (mHideCube[i].mSize.x <= (float)getWindowWidth() ||
-					mHideCube[i].mSize.y <= (float)getWindowHeight()) {
+				mHideCube[1].mPos.x += mFadeSpeed;
+				mHideCube[2].mPos.x -= mFadeSpeed;
+				mHideCube[3].mPos.y += fadeSpeedY;
+				mHideCube[4].mPos.y -= fadeSpeedY;
+			}
+			else {
+				mHideCube[0].mSize.x -= mFadeSpeed;
+				mHideCube[0].mSize.y -= fadeSpeedY;
+			}
 
-					mHideCube[i].mSize.x = (float)getWindowWidth();
-					mHideCube[i].mSize.y = (float)getWindowHeight();
+			//α値が最大値(1.0f)になったら
+			//fadeInを使用可能に変更
+			if (mHideCube[0].mSize.x <= (float)getWindowWidth() ||
+				mHideCube[0].mSize.y <= (float)getWindowHeight()) {
+
+				if (canClose) {
+					mCanMoveHideBox = true;
+
+					//閉じる場合
+					if (mHideCube[1].mPos.x >= -quarterWindowWidth) {
+						mIsEndFadeOut = true;
+						mIsEndFadeIn = false;
+						return;
+					}
+				}
+				else {
+					mHideCube[0].mSize.x = (float)getWindowWidth();
+					mHideCube[0].mSize.y = (float)getWindowHeight();
 					mIsEndFadeOut = true;
 					mIsEndFadeIn = false;
 					return;
 				}
-
 			}
-
 		}
 
 	}
-
 }
 void Fade::pinHallFadeIn(const int time) {
 
@@ -718,31 +780,42 @@ void Fade::pinHallFadeIn(const int time) {
 
 	float fadeSpeedY =
 		(((float)getWindowHeight() * 5) / mFadeInterval);
+	const float quarterWindowWidth
+		= ((float)getWindowWidth() / 4);
+	const float quarterWindowHeight
+		= ((float)getWindowHeight() / 4);
 
 	if (mIsReadyFadeIn) {
 
-		for (unsigned int i = 0; i < mHideCube.size(); ++i) {
+		if (mCanMoveHideBox) {
+			mHideCube[0].mSize.x += mFadeSpeed;
+			mHideCube[0].mSize.y += fadeSpeedY;
 
-			mHideCube[i].mSize.x += mFadeSpeed;
-			mHideCube[i].mSize.y += fadeSpeedY;
+			mHideCube[1].mPos.x -= mFadeSpeed;
+			mHideCube[2].mPos.x += mFadeSpeed;
+			mHideCube[3].mPos.y -= fadeSpeedY;
+			mHideCube[4].mPos.y += fadeSpeedY;
+		}
+		else {
+			mHideCube[0].mSize.x += mFadeSpeed;
+			mHideCube[0].mSize.y += fadeSpeedY;
+		}
 
-			//α値が最小値(0.0f)になったら
-			//fadeOutを使用可能に変更a
-			if (mHideCube[i].mSize.x >= ((float)getWindowWidth() * 5) ||
-				mHideCube[i].mSize.y >= ((float)getWindowHeight() * 5)) {
+		//α値が最小値(0.0f)になったら
+		//fadeOutを使用可能に変更a
+		if (mHideCube[0].mSize.x >= ((float)getWindowWidth() * 5) ||
+			mHideCube[0].mSize.y >= ((float)getWindowHeight() * 5)) {
 
-				mHideCube.clear();
+			mHideCube.clear();
 
-				mIsReadyFadeOut =
-					mIsEndFadeIn = true;
+			mIsReadyFadeOut =
+				mIsEndFadeIn = true;
 
-				mIsReadyFadeIn =
-					mIsEndInit =
-					mIsEndFadeOut = false;
+			mIsReadyFadeIn =
+				mIsEndInit =
+				mIsEndFadeOut = false;
 
-				return;
-			}
-
+			return;
 		}
 
 	}
@@ -777,8 +850,8 @@ void Fade::noiseFadeOut(
 
 			mPattern = NOISE_FADE;
 			mFadeInterval = (60 * time);
-			mFadeSpeed =
-				((float)cubeMax / mFadeInterval);
+			mFadeSpeed = ((float)cubeMax / mFadeInterval);
+
 			mNoiseCubeLength = length;
 			mNoiseCubeWide = wide;
 
@@ -1076,13 +1149,16 @@ void Fade::draw() {
 			gl::color(mHideCube[i].mColor);
 
 			gl::enable(GL_TEXTURE_2D);
-			mPinHallTexture.bind();
+
+			if (i == 0)
+				mPinHallTexture.bind();
 
 			//描画
 			gl::drawCube(mHideCube[i].mPos, mHideCube[i].mSize);
 
 			//全て元に戻す
-			mPinHallTexture.unbind();
+			if (i == 0)
+				mPinHallTexture.unbind();
 			gl::disable(GL_TEXTURE_2D);
 
 			gl::color(1.0f, 1.0f, 1.0f, 1.0f);

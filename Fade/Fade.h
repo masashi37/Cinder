@@ -73,6 +73,7 @@ private:
 
 
 	gl::Texture mPinHallTexture;
+	gl::Texture mPinHallCloseTexture;
 
 
 	bool mIsReadyFadeOut;
@@ -82,6 +83,8 @@ private:
 	bool mIsEndFadeIn;
 
 	bool mIsEndInit;
+
+	bool mCanMoveHideBox;
 
 
 	FadePattern mPattern;
@@ -128,10 +131,8 @@ public:
 	//中央カーテン式(進行方向)FadeIn　(終了までの秒数(int))
 	void centerCurtainFadeIn(const int);
 
-	//ピンホールFadeOut　(終了までの秒数(int),)
-	void pinHallFadeOut(const int,const bool);
-	//ピンホールFadeOut　(終了までの秒数(int))
-	void pinHallFadeOut(const int);
+	//ピンホールFadeOut　(終了までの秒数(int),閉じるかどうか→trueで閉じる(bool))
+	void pinHallFadeOut(const int, const bool canClose = false);
 	//ピンホールFadeIn　(終了までの秒数(int))
 	void pinHallFadeIn(const int);
 
@@ -141,6 +142,9 @@ public:
 	//ノイズ(Cube)大量表示でFadeIn
 	//(インターバル(int),縦のマス数(int),横のマス数(int))
 	void noiseFadeIn(const int);
+
+	void testOut(const int);
+	void testIn(const int);
 
 	
 	//FadeOut/Inの描画

@@ -37,8 +37,10 @@ public:
 			//fade.fromLeftCurtainFadeOut(2);
 			//fade.fromRightCurtainFadeOut(2);
 			//fade.centerCurtainFadeOut(2);
-			fade.pinHallFadeOut(2);
-			//fade.noiseFadeOut(1, 5, 5);
+			//fade.pinHallFadeOut(2);
+			//fade.pinHallFadeOut(2);
+			fade.pinHallFadeOut(2, true);
+		//fade.noiseFadeOut(1, 5, 5);
 
 		if (mIsDownSKey)
 			//fade.fullScreenFadeIn(2);
@@ -48,7 +50,7 @@ public:
 			//fade.fromRightCurtainFadeIn(2);
 			//fade.centerCurtainFadeIn(2);
 			fade.pinHallFadeIn(2);
-			//fade.noiseFadeIn(1);
+		//fade.noiseFadeIn(1);
 	}
 
 	void draw() {
