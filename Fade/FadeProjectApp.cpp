@@ -34,11 +34,17 @@ public:
 			//fadeOut.veilDownFade(2);
 			//fadeOut.fromLeftCurtainFade(2);
 			//fadeOut.fromRightCurtainFade(2);
-			fadeOut.centerCurtainFade(2);
-			//fadeOut.pinHallFade(2);
+			//fadeOut.centerCurtainFade(2);
+			fadeOut.pinHoleFade(2, 100, 50);
 		}
 		if (isActiveIn) {
-			fadeIn.fullScreenFade(2);
+			//fadeIn.fullScreenFade(2);
+			//fadeIn.circleScalingFade(2);
+			//fadeIn.veilDownFade(2);
+			//fadeIn.fromLeftCurtainFade(2);
+			//fadeIn.fromRightCurtainFade(2);
+			//fadeIn.centerCurtainFade(2);
+			fadeIn.pinHoleFade(2, 100, 50);
 		}
 
 		if (fadeOut.getEnd())

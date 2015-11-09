@@ -83,6 +83,9 @@ void FadeOut::circleScalingFade(int time) {
 			mIsEndInit = false;
 	}
 
+	const float windowOutPos =
+		((float)getWindowWidth() / 1.5f);
+
 	if (mCanStart) {
 
 		//生成・初期化
@@ -120,7 +123,7 @@ void FadeOut::circleScalingFade(int time) {
 				//α値が最大値(1.0f)になったら
 				//fadeInを使用可能に変更
 				if (mHideCircle[0].mColor.a >= 1.0f ||
-					mHideCircle[0].mSize >= getWindowWidth()) {
+					mHideCircle[0].mSize >= windowOutPos) {
 
 					mHideCircle.clear();
 
@@ -396,12 +399,20 @@ void FadeOut::centerCurtainFade(int time) {
 
 }
 
-void FadeOut::pinHallFade(int time) {
+void FadeOut::pinHoleFade(
+	int time, float space = 0.0f, const int slices = 12) {
 
 	if (!mCanStart) {
 		mCanStart = true;
 		mIsEnd =
 			mIsEndInit = false;
+	}
+
+	const float windowOutPos =
+		((float)getWindowWidth() / 1.5f);
+
+	if (space > windowOutPos) {
+		space = 0.0f;
 	}
 
 	if (mCanStart) {
@@ -410,17 +421,19 @@ void FadeOut::pinHallFade(int time) {
 		if (!mIsEndInit) {
 
 			//データをパターンに合わせて初期化
-			mPattern = PIN_HALL_FADE;
+			mPattern = PIN_HOLE_FADE;
 			mInterval = (60 * time);
-			mSpeed = (1.0f / mInterval);
+			mSpeed = (((float)getWindowWidth() - space) / mInterval);
 
 			//必要な個数生成
-			mHideCircle.emplace_back();
+			mHideCylinder.emplace_back();
 
 			//生成したオブジェクトの初期化
-			mHideCircle[0].mPos = Vec3f::zero();
-			mHideCircle[0].mSize = 0.0f;
-			mHideCircle[0].mColor = ColorA::zero();
+			mHideCylinder[0].mStartPos = windowOutPos;
+			mHideCylinder[0].mEndPos = windowOutPos;
+			mHideCylinder[0].mSliceCount = slices;
+			mHideCylinder[0].mColor = ColorA(
+				0.0f, 0.0f, 0.0f, 1.0f);
 
 			//一度だけしか処理しないように
 			mIsEndInit = true;
@@ -429,21 +442,15 @@ void FadeOut::pinHallFade(int time) {
 		//初期化が終了後、更新開始
 		if (mIsEndInit) {
 
-			const float sizeChangeSpeed =
-				((float)getWindowWidth() / mInterval);
-
-			if ((int)mHideCircle.size() > 0) {
-				//α値計算
-				mHideCircle[0].mColor.a += mSpeed;
+			if ((int)mHideCylinder.size() > 0) {
 				//サイズ計算
-				mHideCircle[0].mSize += sizeChangeSpeed;
+				mHideCylinder[0].mStartPos -= mSpeed;
 
 				//α値が最大値(1.0f)になったら
 				//fadeInを使用可能に変更
-				if (mHideCircle[0].mColor.a >= 1.0f ||
-					mHideCircle[0].mSize >= getWindowWidth()) {
+				if (mHideCylinder[0].mStartPos <= space) {
 
-					mHideCircle.clear();
+					mHideCylinder.clear();
 
 					mCanStart = false;
 					mIsEnd = true;
@@ -454,8 +461,6 @@ void FadeOut::pinHallFade(int time) {
 		}
 
 	}
-
-
 
 }
 
@@ -626,28 +631,29 @@ void FadeOut::draw() {
 
 		break;
 #pragma endregion
-#pragma region case PIN_HALL_FADE:
-	case PIN_HALL_FADE:
+#pragma region case PIN_HOLE_FADE:
+	case PIN_HOLE_FADE:
 
-		for (unsigned int i = 0; i < mHideCube.size(); ++i) {
+		for (unsigned int i = 0; i < mHideCylinder.size(); ++i) {
 
 			//透明度追加・表示位置を中心に移動・色を変更・画像の貼り付け
 			gl::pushModelView();
 			gl::translate(getWindowCenter());
+			gl::rotate(Vec3f(90, 0, 0));
 
 			gl::enableAlphaBlending();
 
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_DST_ALPHA, GL_SRC_ALPHA);
-
-			gl::color(mHideCube[i].mColor);
-
-			gl::enable(GL_TEXTURE_2D);
+			gl::color(mHideCylinder[i].mColor);
 
 			//描画
-			gl::drawCube(mHideCube[i].mPos, mHideCube[i].mSize);
+			gl::drawCylinder(
+				mHideCylinder[i].mStartPos,
+				mHideCylinder[i].mEndPos,
+				0.1f,
+				mHideCylinder[i].mSliceCount);
 
 			//全て元に戻す			
+			gl::color(Color(1, 1, 1));
 			gl::popModelView();
 
 		}

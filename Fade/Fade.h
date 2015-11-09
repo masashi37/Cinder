@@ -33,7 +33,7 @@ protected:
 		//センターカーテンの様に横からfade
 		CENTER_CURTAIN_FADE,
 		//ピンホール型のfade(改善の余地有)
-		PIN_HALL_FADE,
+		PIN_HOLE_FADE,
 	};
 
 	//どのパターンを使うのか制御するスイッチで使用
@@ -55,10 +55,18 @@ protected:
 		Vec3f mThird_pos;
 	};
 
+	struct CylinderDate {
+		float mStartPos;
+		float mEndPos;
+		int mSliceCount;
+		ColorA mColor;
+	};
+
 	//オブジェクトを形毎にvectorで宣言
 	std::vector<CubeDate>mHideCube;
 	std::vector<CircleDate>mHideCircle;
 	std::vector<PolygonDate>mHidePolygon;
+	std::vector<CylinderDate>mHideCylinder;
 
 	//開始を制御
 	bool mCanStart;
