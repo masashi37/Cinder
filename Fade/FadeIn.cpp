@@ -10,13 +10,67 @@ FadeIn::FadeIn() {
 		mIsEndInit = false;
 }
 
-bool FadeIn::getEnd() {
+bool FadeIn::getIsEnd() {
 	return mIsEnd;
 }
 
 //---------------------------------------------
 
-void FadeIn::fullScreenFade(int time) {
+void FadeIn::setType(FadeType type,
+	int time, Color color, bool isUseEasing) {
+
+	switch (type) {
+	case FullScreen:
+		fade = [=] {
+			fullScreenFade(time, color, isUseEasing);
+		};
+		break;
+
+	case Circle:
+		fade = [=] {
+			circleScalingFade(time, color, isUseEasing);
+		};
+		break;
+
+	case Vell:
+		fade = [=] {
+			veilDownFade(time, color, isUseEasing);
+		};
+		break;
+
+	case FromLeft:
+		fade = [=] {
+			fromLeftCurtainFade(time, color, isUseEasing);
+		};
+		break;
+
+	case FromRight:
+		fade = [=] {
+			fromRightCurtainFade(time, color, isUseEasing);
+		};
+		break;
+
+	case BothSide:
+		fade = [=] {
+			centerCurtainFade(time, color, isUseEasing);
+		};
+		break;
+
+	case Hole:
+		fade = [=] {
+			pinHoleFade(time, 0.0f, 50, color, isUseEasing);
+		};
+		break;
+	}
+
+	fade();
+}
+
+//---------------------------------------------------
+//TODO:Easingを使った中身の実装
+//---------------------------------------------------
+
+void FadeIn::fullScreenFade(int time, Color color, bool isUseEasing) {
 
 	if (!mCanStart) {
 		mCanStart = true;
@@ -45,8 +99,7 @@ void FadeIn::fullScreenFade(int time) {
 				(float)getWindowHeight(),
 				0);
 
-			mHideCube[0].mColor = ColorA(
-				0, 0, 0, 1.0f);
+			mHideCube[0].mColor = ColorA(color, 1.0f);
 
 			//一度のみ初期化
 			mIsEndInit = true;
@@ -77,7 +130,7 @@ void FadeIn::fullScreenFade(int time) {
 
 }
 
-void FadeIn::circleScalingFade(int time) {
+void FadeIn::circleScalingFade(int time, Color color, bool isUseEasing) {
 
 	if (!mCanStart) {
 		mCanStart = true;
@@ -106,8 +159,7 @@ void FadeIn::circleScalingFade(int time) {
 
 			mHideCircle[0].mSize = windowOutPos;
 
-			mHideCircle[0].mColor = ColorA(
-				0.0f, 0.0f, 0.0f, 1.0f);
+			mHideCircle[0].mColor = ColorA(color, 1.0f);
 
 			//一度だけしか処理しないように
 			mIsEndInit = true;
@@ -144,7 +196,7 @@ void FadeIn::circleScalingFade(int time) {
 
 }
 
-void FadeIn::veilDownFade(int time) {
+void FadeIn::veilDownFade(int time, Color color, bool isUseEasing) {
 
 	if (!mCanStart) {
 		mCanStart = true;
@@ -174,8 +226,7 @@ void FadeIn::veilDownFade(int time) {
 				(float)getWindowHeight(),
 				0.1f);
 
-			mHideCube[0].mColor =
-				ColorA(0.0f, 0.0f, 0.0f, 1.0f);
+			mHideCube[0].mColor = ColorA(color, 1.0f);
 
 			//一度だけしか処理しないように
 			mIsEndInit = true;
@@ -206,7 +257,7 @@ void FadeIn::veilDownFade(int time) {
 
 }
 
-void FadeIn::fromLeftCurtainFade(int time) {
+void FadeIn::fromLeftCurtainFade(int time, Color color, bool isUseEasing) {
 
 	if (!mCanStart) {
 		mCanStart = true;
@@ -236,8 +287,7 @@ void FadeIn::fromLeftCurtainFade(int time) {
 				(float)getWindowHeight(),
 				0.1f);
 
-			mHideCube[0].mColor =
-				ColorA(0.0f, 0.0f, 0.0f, 1.0f);
+			mHideCube[0].mColor = ColorA(color, 1.0f);
 
 			//一度だけしか処理しないように
 			mIsEndInit = true;
@@ -268,7 +318,7 @@ void FadeIn::fromLeftCurtainFade(int time) {
 
 }
 
-void FadeIn::fromRightCurtainFade(int time) {
+void FadeIn::fromRightCurtainFade(int time, Color color, bool isUseEasing) {
 
 	if (!mCanStart) {
 		mCanStart = true;
@@ -298,8 +348,7 @@ void FadeIn::fromRightCurtainFade(int time) {
 				(float)getWindowHeight(),
 				0.1f);
 
-			mHideCube[0].mColor =
-				ColorA(0.0f, 0.0f, 0.0f, 1.0f);
+			mHideCube[0].mColor = ColorA(color, 1.0f);
 
 			//一度だけしか処理しないように
 			mIsEndInit = true;
@@ -330,7 +379,7 @@ void FadeIn::fromRightCurtainFade(int time) {
 
 }
 
-void FadeIn::centerCurtainFade(int time) {
+void FadeIn::centerCurtainFade(int time, Color color, bool isUseEasing) {
 
 	if (!mCanStart) {
 		mCanStart = true;
@@ -367,8 +416,7 @@ void FadeIn::centerCurtainFade(int time) {
 					(float)getWindowHeight(),
 					0.1f);
 
-				mHideCube[i].mColor =
-					ColorA(0.0f, 0.0f, 0.0f, 1.0f);
+				mHideCube[i].mColor = ColorA(color, 1.0f);
 			}
 
 			//一度だけしか処理しないように
@@ -405,7 +453,8 @@ void FadeIn::centerCurtainFade(int time) {
 }
 
 void FadeIn::pinHoleFade(
-	int time, float space = 0.0f, const int slices = 12) {
+	int time, float space, const int slices,
+	Color color, bool isUseEasing) {
 
 	if (!mCanStart) {
 		mCanStart = true;
@@ -437,8 +486,7 @@ void FadeIn::pinHoleFade(
 			mHideCylinder[0].mStartPos = space;
 			mHideCylinder[0].mEndPos = windowOutPos;
 			mHideCylinder[0].mSliceCount = slices;
-			mHideCylinder[0].mColor = ColorA(
-				0.0f, 0.0f, 0.0f, 1.0f);
+			mHideCylinder[0].mColor = ColorA(color, 1.0f);
 
 			//一度だけしか処理しないように
 			mIsEndInit = true;

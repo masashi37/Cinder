@@ -4,22 +4,34 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 
-#include "cinder/ImageIo.h"
-#include "cinder/gl/Texture.h"
+#include "cinder/Timeline.h"
+#include "cinder/Tween.h"
 
 #include <vector>
+#include <functional>
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
 
+enum FadeType {
+None,
+
+FullScreen,
+Circle,
+Vell,
+FromLeft,
+FromRight,
+BothSide,
+Hole
+};
+
 class Fade {
 
 protected:
 
-	//FadeTypeの番号
-	enum FadeType {
+	enum FadeTypeName {
 		//全画面のα値変化でfade
 		FULL_SCREEN_FADE,
 		//画面の中心から円が出て、拡縮とα値変化でfade
@@ -35,53 +47,89 @@ protected:
 		//ピンホール型のfade(改善の余地有)
 		PIN_HOLE_FADE,
 	};
+	FadeTypeName mPattern;
 
-	//どのパターンを使うのか制御するスイッチで使用
-	FadeType mPattern;
+	//-----------------------------------------------
 
-	//Fadeさせるオブジェクトの形
+	//Objects
 	struct ObjectBase {
 		Vec3f mPos;
 		ColorA mColor;
 	};
+
 	struct CubeDate :ObjectBase {
 		Vec3f mSize;
 	};
+	std::vector<CubeDate>mHideCube;
 	struct CircleDate :ObjectBase {
 		float mSize;
 	};
-	struct PolygonDate :ObjectBase {
-		Vec3f mSecond_pos;
-		Vec3f mThird_pos;
-	};
-
+	std::vector<CircleDate>mHideCircle;
 	struct CylinderDate {
 		float mStartPos;
 		float mEndPos;
 		int mSliceCount;
 		ColorA mColor;
 	};
-
-	//オブジェクトを形毎にvectorで宣言
-	std::vector<CubeDate>mHideCube;
-	std::vector<CircleDate>mHideCircle;
-	std::vector<PolygonDate>mHidePolygon;
 	std::vector<CylinderDate>mHideCylinder;
 
-	//開始を制御
+	//EasingObjects
+	struct EasingObjectBase {
+		Anim<Vec2f>mPos;
+		Anim<Vec2f>mEndPos;
+		ColorA mColor;
+		Anim<float>mAlpha;
+		Anim<float>mEndAlpha;
+	};
+
+	struct EasingCubeDate :ObjectBase {
+		Anim<Vec2f>mSize;
+		Anim<Vec2f>mEndSize;
+	};
+	std::vector<EasingCubeDate>mHideEasingCube;
+	struct EasingCircleDate :ObjectBase {
+		Anim<float>mSize;
+		Anim<float>mEndSize;
+	};
+	std::vector<EasingCircleDate>mHideEasingCircle;
+	struct EasingCylinderDate {
+		Anim<float>mStartPos;
+		Anim<float>mEndPos;
+		int mSliceCount;
+		ColorA mColor;
+	};
+	std::vector<EasingCylinderDate>mHideEasingCylinder;
+
+	//Control of the function
 	bool mCanStart;
-	//終わったか確認用
 	bool mIsEnd;
-	//Initの制御
 	bool mIsEndInit;
 
-	//PinHallFadeの画像
-	gl::Texture mPinHallTexture;
+	bool mIsUseEasing;
 
-	//Fadeが終わるまでの時間
 	int mInterval;
-	//オブジェクトを変化させる速度
-	// → mFadeIntervalを見て計算
 	float mSpeed;
 
 };
+
+//-----------------------------------------------------
+
+static void lightUp(Rectf rectState, Color color) {
+
+	ColorA lightColor =
+		ColorA(color, 0.2f);
+
+	gl::pushModelView();
+
+	gl::translate(getWindowCenter());
+	gl::enableAlphaBlending();
+	gl::color(lightColor);
+
+	gl::drawSolidRect(rectState);
+
+	gl::color(1.0f, 1.0f, 1.0f, 1.0f);
+	gl::disableAlphaBlending();
+
+	gl::popModelView();
+
+}
