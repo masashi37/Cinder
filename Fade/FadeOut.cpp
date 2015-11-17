@@ -7,7 +7,8 @@ FadeOut::FadeOut() {
 
 	mCanStart =
 		mIsEnd =
-		mIsEndInit = false;
+		mIsEndInit =
+		mIsEndEasing = false;
 }
 
 bool FadeOut::getIsEnd() {
@@ -75,7 +76,9 @@ void FadeOut::fullScreenFade(int time, Color color, bool isUseEasing) {
 	if (!mCanStart) {
 		mCanStart = true;
 		mIsEnd =
-			mIsEndInit = false;
+			mIsEndInit =
+			mIsUseEasing =
+			mIsEndEasing = false;
 	}
 
 	if (mCanStart) {
@@ -83,36 +86,82 @@ void FadeOut::fullScreenFade(int time, Color color, bool isUseEasing) {
 		if (!mIsEndInit) {
 
 			mPattern = FULL_SCREEN_FADE;
-			mInterval = (60 * time);
-			mSpeed = (1.0f / mInterval);
 
-			mHideCube.emplace_back();
+			if (!isUseEasing) {
+				mInterval = (60 * time);
+				mSpeed = (1.0f / mInterval);
 
-			mHideCube[0].mPos = Vec3f::zero();
+				mHideCube.emplace_back();
 
-			mHideCube[0].mSize = Vec3f(
-				(float)getWindowWidth(),
-				(float)getWindowHeight(),
-				0);
+				mHideCube[0].mPos = Vec3f::zero();
 
-			mHideCube[0].mColor = ColorA(color, 0.0f);
+				mHideCube[0].mSize = Vec3f(
+					(float)getWindowWidth(),
+					(float)getWindowHeight(),
+					0);
+
+				mHideCube[0].mColor = ColorA(color, 0.0f);
+			}
+			if (isUseEasing) {
+				mIsUseEasing = true;
+
+				mHideEasingCube.emplace_back();
+
+				mHideEasingCube[0].mPos = Vec2f::zero();
+
+				mHideEasingCube[0].mSize = Vec2f(
+					(float)getWindowWidth(),
+					(float)getWindowHeight());
+
+				mHideEasingCube[0].mAlpha = 0.0f;
+				mHideEasingCube[0].mEndAlpha = 1.0f;
+
+				mHideEasingCube[0].mColor = ColorA(
+					color, mHideEasingCube[0].mAlpha);
+			}
 
 			mIsEndInit = true;
 		}
 
 		if (mIsEndInit) {
 
-			if ((int)mHideCube.size() > 0) {
-				mHideCube[0].mColor.a += mSpeed;
+			if (!isUseEasing) {
+				if ((int)mHideCube.size() > 0) {
+					mHideCube[0].mColor.a += mSpeed;
 
-				if (mHideCube[0].mColor.a >= 1.0f) {
+					if (mHideCube[0].mColor.a >= 1.0f) {
 
-					mHideCube.clear();
+						mHideCube.clear();
 
-					mCanStart = false;
-					mIsEnd = true;
+						mCanStart = false;
+						mIsEnd = true;
+					}
 				}
 			}
+			if (isUseEasing) {
+				if ((int)mHideEasingCube.size() > 0) {
+					mHideEasingCube[0].mColor.a =
+						mHideEasingCube[0].mAlpha;
+
+					if (!mIsEndEasing) {
+						timeline().apply(
+							&mHideEasingCube[0].mAlpha,
+							mHideEasingCube[0].mEndAlpha.value(),
+							(float)time, easeOutInCirc);
+						mIsEndEasing = true;
+					}
+
+					if (mHideEasingCube[0].mColor.a >= 1.0f) {
+
+						mHideEasingCube.clear();
+
+						mCanStart =
+							mIsUseEasing = false;
+						mIsEnd = true;
+					}
+				}
+			}
+			//console() << mHideEasingCube[0].mColor.a << std::endl;
 		}
 	}
 
@@ -460,9 +509,19 @@ void FadeOut::draw() {
 
 	case FULL_SCREEN_FADE:
 		for (unsigned int i = 0; i < mHideCube.size(); ++i) {
-			gl::color(mHideCube[i].mColor);
-			gl::drawCube(mHideCube[i].mPos, mHideCube[i].mSize);
-			gl::color(1.0f, 1.0f, 1.0f, 1.0f);
+			if (!mIsUseEasing) {
+				gl::color(mHideCube[i].mColor);
+				gl::drawCube(mHideCube[i].mPos, mHideCube[i].mSize);
+				gl::color(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+		}
+		for (unsigned int i = 0; i < mHideEasingCube.size(); ++i) {
+			if (mIsUseEasing) {
+				gl::color(mHideEasingCube[i].mColor);
+				gl::drawCube(Vec3f(mHideEasingCube[i].mPos, 0),
+					Vec3f(mHideEasingCube[i].mSize, 0));
+				gl::color(1.0f, 1.0f, 1.0f, 1.0f);
+			}
 		}
 		break;
 

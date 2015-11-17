@@ -1,10 +1,10 @@
 
 #pragma once
 
-#include "Fade.h"
+#include "FadeBase.h"
 
 
-class FadeOut :public Fade {
+class FadeOut :public FadeBase {
 
 private:
 

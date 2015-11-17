@@ -3,7 +3,7 @@
 #include "FadeIn.h"
 
 
-class FadeProjectApp : public AppNative {
+class EasingFadeProjectApp : public AppNative {
 
 	bool isActiveOut;
 	bool isActiveIn;
@@ -27,7 +27,8 @@ public:
 
 	void update() {
 		if (isActiveOut) {
-			fadeOut.setType(FullScreen);
+			fadeOut.setType(
+				FullScreen, 2, Color::black(), true);
 		}
 		if (isActiveIn) {
 			fadeIn.setType(FullScreen);
@@ -55,4 +56,4 @@ public:
 		fadeIn.draw();
 	}
 };
-CINDER_APP_NATIVE(FadeProjectApp, RendererGl)
+CINDER_APP_NATIVE( EasingFadeProjectApp, RendererGl )

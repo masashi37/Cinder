@@ -27,7 +27,7 @@ BothSide,
 Hole
 };
 
-class Fade {
+class FadeBase {
 
 protected:
 
@@ -82,12 +82,12 @@ protected:
 		Anim<float>mEndAlpha;
 	};
 
-	struct EasingCubeDate :ObjectBase {
+	struct EasingCubeDate :EasingObjectBase {
 		Anim<Vec2f>mSize;
 		Anim<Vec2f>mEndSize;
 	};
 	std::vector<EasingCubeDate>mHideEasingCube;
-	struct EasingCircleDate :ObjectBase {
+	struct EasingCircleDate :EasingObjectBase {
 		Anim<float>mSize;
 		Anim<float>mEndSize;
 	};
@@ -106,6 +106,7 @@ protected:
 	bool mIsEndInit;
 
 	bool mIsUseEasing;
+	bool mIsEndEasing;
 
 	int mInterval;
 	float mSpeed;
